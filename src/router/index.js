@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Index from '@/components/Index'
+import IssueOrder from '@/components/IssueOrder'
 
 Vue.use(Router)
 
@@ -12,7 +12,7 @@ export default new Router({
     },
     {
     	path: '/issue-order',
-    	component: Index
+    	component: IssueOrder
     }
   ]
 })

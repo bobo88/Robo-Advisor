@@ -15,6 +15,7 @@
   "dependencies": {
     "axios": "^0.16.2",
     "echarts": "^3.6.2",
+    "iview": "^2.0.0",
     "less": "^2.7.2",
     "less-loader": "^4.0.5",
     "vue": "^2.3.3",

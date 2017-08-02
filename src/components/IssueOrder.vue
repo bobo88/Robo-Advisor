@@ -4,19 +4,24 @@
 日期： 20170802
 -->
 <template>
-  <div class="index">
-    
+  <div class="issue-order">
+    <account-position></account-position>
   </div>
 </template>
 
 <script>
+import AccountPosition from '@/components/AccountPosition'
+
 export default {
-  name: 'index',
-  data () {
-    return {
-      msg: ''
-    }
-  }
+	components: {
+		AccountPosition
+	},
+  	name: 'issue-order',
+  	data () {
+	    return {
+	      	msg: ''
+	    }
+  	}
 }
 </script>
 
