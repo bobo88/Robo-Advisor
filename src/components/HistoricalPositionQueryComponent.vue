@@ -17,9 +17,9 @@
             </div>
         </Tooltip>
 
-        <Date-picker type="date" placeholder="选择日期" style="width: 200px" placement="bottom-end" class="mr10"></Date-picker>
+        <Date-picker type="date" placeholder="选择日期" style="width: 140px" placement="bottom-end" class="mr10"></Date-picker>
         <span class="mr10">至</span>
-        <Date-picker type="date" placeholder="选择日期" style="width: 200px" placement="bottom-end" class="mr10"></Date-picker>
+        <Date-picker type="date" placeholder="选择日期" style="width: 140px" placement="bottom-end" class="mr10"></Date-picker>
         <Button type="info" shape="circle" style="width: 70px" class="mr10">查询</Button>
       </div>
   	</header>

@@ -1,5 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+
+//下达指令
 import IssueOrder from '@/components/issueOrder/IssueOrder'
 
 //账户查询
@@ -15,6 +17,9 @@ import QueryAccount from '@/components/queryAccount/QueryAccount'
 	//收益走势
 	import CurveOfRefum from '@/components/queryAccount/CurveOfRefum'
 
+//查看指令
+import QueryOrders from '@/components/queryOrders/QueryOrders'
+
 Vue.use(Router)
 
 export default new Router({
@@ -26,6 +31,10 @@ export default new Router({
     {
     	path: '/issue-order',
     	component: IssueOrder
+    },
+    {
+    	path: '/query-orders',
+    	component: QueryOrders
     },
     {
     	path: '/query-account',
