@@ -83,7 +83,7 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="less">
-  .left{ position: absolute; z-index: 3; left: 0; top: 0; width: 260px; min-height: 100vh; background: #1D2742; box-shadow: 2px 0 10px 0 rgba(0,0,0,0.10);
+  .left{ position: absolute; z-index: 3; left: 0; top: 0; width: 260px; min-height: 100vh; height: 100%; background: #1D2742; box-shadow: 2px 0 10px 0 rgba(0,0,0,0.10);
     .logo{ padding: 30px 35px;
       img{ width: 170px; height: 60px;}
     }

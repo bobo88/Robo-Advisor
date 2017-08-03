@@ -12,6 +12,8 @@ import QueryAccount from '@/components/queryAccount/QueryAccount'
 	import EntrustQuery from '@/components/queryAccount/EntrustQuery'
 	//历史持仓
 	import HistoricalPositionQuery from '@/components/queryAccount/HistoricalPositionQuery'
+	//收益走势
+	import CurveOfRefum from '@/components/queryAccount/CurveOfRefum'
 
 Vue.use(Router)
 
@@ -56,7 +58,7 @@ export default new Router({
     		// 收益走势
     		{
     			path: 'curve-of-refum',
-    			component: IssueOrder
+    			component: CurveOfRefum
     		}
     	]	
     }
