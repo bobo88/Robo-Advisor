@@ -111,8 +111,10 @@ export default {
 
         dl{
           dt{
-            a.router-link-active{ color: #fff; background-image: linear-gradient(90deg, #6F64FF 0%, #B93BFB 100%);}
-            span{ display: block;}
+            a{ font-size: 16px;
+              &.router-link-active{ color: #fff; background-image: linear-gradient(90deg, #6F64FF 0%, #B93BFB 100%);}
+            }
+            span{ display: block; font-size: 12px;}
           }
           dd{ display: none; height: 50px; background: #3B4B76;
             a{ padding: 7px 0 7px 30px; height: 50px; line-height: 18px; font-size: 12px;

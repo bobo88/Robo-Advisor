@@ -7,7 +7,7 @@
   <div class="account-position">
   	<header class="table-common-head clearfix">
   		<span class="tit fl">账户持仓</span>
-  		<p class="head-summary fr">
+  		<p class="head-summary fr" v-if="headSummary">
   			<span>账户总资产：5678010.75</span>
   			<span>收益率：<em class="f-red">+23.45%</em></span>
   			<span>累计盈亏：<em class="f-red">+6780.25</em></span>
@@ -21,6 +21,7 @@
 <script>
 export default {
   name: 'account-position',
+  props: ['headSummary'], // 父组件传headSummary属性过来，如果为false，则不显示账户持仓组件头部右边内容
   data () {
     return {
         columns: [
