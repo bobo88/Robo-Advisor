@@ -24,6 +24,11 @@ import QueryAccount from '@/components/queryAccount/QueryAccount';
 import SimulatedAccount from '@/components/simulatedAccount/SimulatedAccount';
 	import AccountInformation from '@/components/simulatedAccount/AccountInformation';
 
+//行情数据
+import DataOfQuotation from '@/components/dataOfQuotation/DataOfQuotation';
+	import TodaysData from '@/components/dataOfQuotation/TodaysData';
+	import HistoricalData from '@/components/dataOfQuotation/HistoricalData';
+
 Vue.use(Router)
 
 export default new Router({
@@ -95,7 +100,25 @@ export default new Router({
     			component: AccountInformation
     		}
     	]
+    },
 
+    //行情数据
+    {
+    	path: '/data-of-quotation',
+    	component: DataOfQuotation,
+    	redirect: '/data-of-quotation/todays-data',
+    	children: [
+    		//当日数据
+    		{
+    			path: 'todays-data',
+    			component: TodaysData
+    		},
+    		//历史数据
+    		{
+    			path: 'historical-data',
+    			component: HistoricalData
+    		}
+    	]
     }
   ]
 })
