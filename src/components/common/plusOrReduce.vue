@@ -7,18 +7,18 @@
   <div class="plus-or-reduce">
     <span v-if=" obj.status === 'plus' " class="f-red">
       <em>+</em>
-      <em>{{ obj.num }}</em>
+      <em>{{ obj.num }} <i v-if="percentage">%</i></em>
     </span>
     <span v-else class="f-green">
       <em>-</em>
-      <em>{{ obj.num }}</em>
+      <em>{{ obj.num }} <i v-if="percentage">%</i></em>
     </span>
   </div>
 </template>
 
 <script>
 export default {
-  props: ['obj'],
+  props: ['obj','percentage'],
   name: 'plus-or-reduce',
   data () {
     return {

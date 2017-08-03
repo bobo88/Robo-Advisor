@@ -5,16 +5,22 @@
 -->
 <template>
   <div class="asset-query">
+  	<!-- 账户参数 -->
+    <account-parameters></account-parameters>
+
+  	<!-- 账户持仓 -->
     <account-position-lang :head-summary="true"></account-position-lang>
   </div>
 </template>
 
 <script>
 import AccountPositionLang from '@/components/AccountPositionLang'
+import AccountParameters from '@/components/AccountParameters'
 
 export default {
 	components: {
-		AccountPositionLang
+		AccountPositionLang,
+		AccountParameters
 	},
   	name: 'asset-query',
   	data () {

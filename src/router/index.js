@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import IssueOrder from '@/components/IssueOrder'
+import IssueOrder from '@/components/issueOrder/IssueOrder'
 
 
 import AssetQuery from '@/components/queryAccount/AssetQuery'
