@@ -97,6 +97,7 @@ strong{ font-weight: normal;}
 .ivu-input{ color: #90A4D9; background: none;}
 .ivu-btn-ghost{ color: #90A4D9; border: 1px solid #90a4d9;}
 .ivu-date-picker{ color: #333;}
+.ivu-tooltip-inner{ max-width: 400px;}
 
 #app {
   position: relative;

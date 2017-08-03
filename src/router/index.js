@@ -2,11 +2,16 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import IssueOrder from '@/components/issueOrder/IssueOrder'
 
-
+//账户查询
 import QueryAccount from '@/components/queryAccount/QueryAccount'
-import AssetQuery from '@/components/queryAccount/AssetQuery'
-import TransactionQuery from '@/components/queryAccount/TransactionQuery'
-import EntrustQuery from '@/components/queryAccount/EntrustQuery'
+	//资产查询
+	import AssetQuery from '@/components/queryAccount/AssetQuery'
+	//成交查询
+	import TransactionQuery from '@/components/queryAccount/TransactionQuery'
+	//委托查询
+	import EntrustQuery from '@/components/queryAccount/EntrustQuery'
+	//历史持仓
+	import HistoricalPositionQuery from '@/components/queryAccount/HistoricalPositionQuery'
 
 Vue.use(Router)
 
@@ -46,7 +51,7 @@ export default new Router({
     		// 历史持仓
     		{
     			path: 'historical-position-query',
-    			component: IssueOrder
+    			component: HistoricalPositionQuery
     		},
     		// 收益走势
     		{
