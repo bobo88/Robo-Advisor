@@ -6,6 +6,7 @@ import IssueOrder from '@/components/issueOrder/IssueOrder'
 import QueryAccount from '@/components/queryAccount/QueryAccount'
 import AssetQuery from '@/components/queryAccount/AssetQuery'
 import TransactionQuery from '@/components/queryAccount/TransactionQuery'
+import EntrustQuery from '@/components/queryAccount/EntrustQuery'
 
 Vue.use(Router)
 
@@ -39,7 +40,7 @@ export default new Router({
     		//委托查询
     		{
     			path: 'entrust-query',
-    			component: IssueOrder
+    			component: EntrustQuery
     		},
 
     		// 历史持仓

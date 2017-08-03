@@ -31,7 +31,7 @@
           <td>{{ item.TradeType }}</td>
           <td>{{ item.TradePrice | currencyFormatter }}</td>
           <td>{{ item.TradeVolume }}</td>
-          <td>{{ item.Order }}</td>
+          <td style="color: #24B1F7;">{{ item.Order }}</td>
           <td><plus-or-reduce :obj="item.ChangeFund"></plus-or-reduce></td>
           <td><plus-or-reduce :obj="item.TradeCost"></plus-or-reduce></td>
         </tr>
