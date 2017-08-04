@@ -5,7 +5,7 @@
 -->
 <template>
   <div class="left">
-    <h1 class="logo"><img src="../../assets/logo.png"></h1>
+    <h1 class="logo"><a href="http://www.yuanbo88.com/"><img src="../../assets/logo.png"></a></h1>
 
     <ul class="nav-list">
       <!-- <li>下达指令</li> -->
