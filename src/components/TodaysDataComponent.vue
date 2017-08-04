@@ -32,14 +32,17 @@
       </thead>
       <tbody>
         <tr v-for="item in tableData.tDataList">
-          <td>{{ item.TradeTime }}</td>
-          <td>{{ item.SpotName }}</td>
-          <td>{{ item.TradeType }}</td>
-          <td>{{ item.TradePrice | currencyFormatter }}</td>
-          <td>{{ item.TradeVolume }}</td>
-          <td style="color: #24B1F7;">{{ item.Order }}</td>
-          <td><plus-or-reduce :obj="item.ChangeFund"></plus-or-reduce></td>
-          <td><plus-or-reduce :obj="item.TradeCost"></plus-or-reduce></td>
+          <td>{{ item.InstID }}</td>
+          <td>{{ item.QuoteTime }}</td>
+          <td>{{ item.Open | currencyFormatter }}</td>
+          <td>{{ item.High | currencyFormatter }}</td>
+          <td>{{ item.Low | currencyFormatter }}</td>
+          <td>{{ item.Close | currencyFormatter }}</td>
+          <td><plus-or-reduce :obj="item.UpDown"></plus-or-reduce></td>
+          <td><plus-or-reduce :obj="item.UpDownRate" :percentage="true"></plus-or-reduce></td>
+          <td>{{ item.Average | currencyFormatter }}</td>
+          <td>{{ item.Volume }}</td>
+          <td>{{ item.RMBTurnOver }}</td>
         </tr>
       </tbody>
     </table>
@@ -92,102 +95,126 @@ export default {
       tableData: {
         tHead: [
           {
-              title: '成交时间',
-              lang: 'Trade Time'
-          },
-          {
               title: '合约',
-              lang: 'Spot Name'
+              lang: 'Inst ID'
           },
           {
-              title: '成交类型',
-              lang: 'Trade Type'
+              title: '时间',
+              lang: 'Quote Time'
           },
           {
-              title: '成交均价',
-              lang: 'Trade Price'
+              title: '开盘价',
+              lang: 'Open'
           },
           {
-              title: '成交数量',
-              lang: 'Trade Volume'
+              title: '最高价',
+              lang: 'High'
           },
           {
-              title: '对应指令编号',
-              lang: 'Order'
+              title: '最低价',
+              lang: 'Low'
           },
           {
-              title: '变动资金',
-              lang: 'Change Fund'
+              title: '收盘价',
+              lang: 'Close'
           },
           {
-              title: '交易费用',
-              lang: 'Trade Cost'
+              title: '涨跌额',
+              lang: 'Up Down'
+          },
+          {
+              title: '涨跌幅',
+              lang: 'Up Down Rate'
+          },
+          {
+              title: '均价',
+              lang: 'Average'
+          },
+          {
+              title: '成交量',
+              lang: 'Volume'
+          },
+          {
+              title: '成交金额(万)',
+              lang: 'RMB TurnOver'
           }
         ],
         tDataList:[
             {
-                TradeTime: '2017-05-25 9:23:35',
-                SpotName: '黄金延期Au(T+D)',
-                TradeType: '多开(Buy Long)',
-                TradePrice: 282.34,
-                TradeVolume: 10,
-                Order: '170525dk0234',
-                ChangeFund: {
+                InstID: '黄金延期Au(T+D)',
+                QuoteTime: '15:30',
+                Open: 268.68,
+                High: 282.34,
+                Low: 258.66,
+                Close: 270.99,
+                UpDown: {
+                  "status": 'plus',
+                  "num": 0.09
+                },
+                UpDownRate: {
+                    "status": 'plus',
+                    "num": 0.03
+                },
+                Average: 270.07,
+                Volume: 1134,
+                RMBTurnOver: 105441
+            },
+            {
+                InstID: '白银延期Au(T+D)',
+                QuoteTime: '15:30',
+                Open: 268.68,
+                High: 282.34,
+                Low: 258.66,
+                Close: 270.99,
+                UpDown: {
                   "status": 'reduce',
-                  "num": 282340
+                  "num": 0.03
                 },
-                TradeCost: {
+                UpDownRate: {
                     "status": 'reduce',
-                    "num": 230.56
-                }
+                    "num": 0.06
+                },
+                Average: 270.07,
+                Volume: 1134,
+                RMBTurnOver: 105441
             },
             {
-                TradeTime: '2017-05-25 9:23:35',
-                SpotName: '白银延期Au(T+D)',
-                TradeType: '多开(Buy Long)',
-                TradePrice: 282.34,
-                TradeVolume: 50,
-                Order: '170525dk0234',
-                ChangeFund: {
+                InstID: '迷你黄金延期Au(T+D)',
+                QuoteTime: '15:30',
+                Open: 268.68,
+                High: 282.34,
+                Low: 258.66,
+                Close: 270.99,
+                UpDown: {
                   "status": 'plus',
-                  "num": 4353523
+                  "num": 0.09
                 },
-                TradeCost: {
+                UpDownRate: {
                     "status": 'plus',
-                    "num": 254.56
-                }
+                    "num": 0.03
+                },
+                Average: 270.07,
+                Volume: 1134,
+                RMBTurnOver: 465637
             },
             {
-                TradeTime: '2017-05-25 9:23:35',
-                SpotName: '迷你黄金延期Au(T+D)',
-                TradeType: '空平(Close Short)',
-                TradePrice: 282.34,
-                TradeVolume: 100,
-                Order: '170525dk0234',
-                ChangeFund: {
-                  "status": 'plus',
-                  "num": 2823457
+                InstID: '黄金延期Au(T+D)',
+                QuoteTime: '15:30',
+                Open: 268.68,
+                High: 544.34,
+                Low: 433.66,
+                Close: 344.99,
+                UpDown: {
+                  "status": 'reduce',
+                  "num": 0.09
                 },
-                TradeCost: {
-                    "status": 'plus',
-                    "num": 344646.56
-                }
-            },
-            {
-                TradeTime: '2017-05-25 9:23:35',
-                SpotName: '黄金延期Au(T+D)',
-                TradeType: '多开(Buy Long)',
-                TradePrice: 282.34,
-                TradeVolume: 60,
-                Order: '170525dk0234',
-                ChangeFund: {
-                  "status": 'plus',
-                  "num": 28255340
+                UpDownRate: {
+                    "status": 'reduce',
+                    "num": 0.03
                 },
-                TradeCost: {
-                    "status": 'plus',
-                    "num": 33440.56
-                }
+                Average: 270.07,
+                Volume: 1134,
+                RMBTurnOver: 566344
             }
         ]
       }
