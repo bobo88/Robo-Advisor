@@ -6,18 +6,17 @@
 <template>
   <div class="historical-data">
   	<!-- 历史数据 -->
-    xxxxxxxxxxxxxxxxx
-    <!-- <historical-data-component></historical-data-component> -->
+    <historical-data-component></historical-data-component>
 
   </div>
 </template>
 
 <script>
-// import HistoricalDataComponent from '@/components/HistoricalDataComponent'
+import HistoricalDataComponent from '@/components/HistoricalDataComponent'
 
 export default {
   	components: {
-  		// HistoricalDataComponent
+  		HistoricalDataComponent
   	},
   	name: 'historical-data',
   	data () {
