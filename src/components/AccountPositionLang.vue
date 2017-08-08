@@ -33,7 +33,7 @@
           <td>{{ item.currentPrice | currencyFormatter }}</td>
           <td>{{ item.averageCost | currencyFormatter }}</td>
           <td><plus-or-reduce :obj="item.floatingReturn"></plus-or-reduce></td>
-          <td><plus-or-reduce :obj="item.returnRatio"></plus-or-reduce></td>
+          <td><plus-or-reduce :obj="item.returnRatio" :percentage="true"></plus-or-reduce></td>
         </tr>
       </tbody>
     </table>

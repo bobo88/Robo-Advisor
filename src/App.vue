@@ -92,13 +92,6 @@ strong{ font-weight: normal;}
   }
 }
 
-/* iview 修改默认样式 */
-.ivu-select-selection{ color: #90A4D9; background: none;}
-.ivu-input{ color: #90A4D9; background: none;}
-.ivu-btn-ghost{ color: #90A4D9; border: 1px solid #90a4d9;}
-.ivu-date-picker{ color: #333;}
-.ivu-tooltip-inner{ max-width: 400px;}
-
 #app {
   position: relative;
   z-index: 1;
@@ -108,6 +101,13 @@ strong{ font-weight: normal;}
   color: #fff;
   background: #192037;
   min-height: 100vh;
+
+  /* iview 修改默认样式 */
+  .ivu-select-selection{ color: #90A4D9; background: none;}
+  .ivu-input{ color: #90A4D9; background: none;}
+  .ivu-btn-ghost{ color: #90A4D9; border: 1px solid #90a4d9;}
+  .ivu-date-picker{ color: #333;}
+  .ivu-tooltip-inner{ max-width: 400px;}
 }
 .main{ padding: 110px 50px 20px 310px; min-width: 100%; min-height: 100%;}
 

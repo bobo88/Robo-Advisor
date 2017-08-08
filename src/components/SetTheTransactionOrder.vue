@@ -44,7 +44,7 @@
             <Select v-model="calculator" style="width:86px" class="mr10">
                 <Option v-for="item in calculatorList" :value="item.value" :key="item.value">{{ item.label }}</Option>
             </Select>
-            <Input v-model="timeInput" placeholder="请输入时间" style="width: 86px"></Input>
+            <Input v-model="timeInput" placeholder="请输入价格" style="width: 86px"></Input>
           </td>
         </tr>
 
