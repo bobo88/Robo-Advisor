@@ -8,7 +8,8 @@ import axios from 'axios'
 import iView from 'iview'
 import 'iview/dist/styles/iview.css'    // 使用 CSS
 
-Vue.use(iView)
+Vue.use(iView);
+Vue.prototype.$http = axios;
 
 Vue.config.productionTip = false
 

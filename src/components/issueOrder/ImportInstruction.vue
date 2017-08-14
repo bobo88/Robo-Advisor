@@ -8,9 +8,13 @@
   	<header class="table-common-head clearfix">
   		<span class="tit fl">导入指令</span>
   		
-  		<input id="fileId" type="file" name="file" style="display:none;" />
+  		<input id="fileId" type="file" name="file" style="display:none;" @change="onFileChange" />
   		<label for="fileId"><span class="file-btn">本地上传</span></label>
   	</header>
+
+	
+
+
   </div>
 </template>
 
@@ -19,8 +23,46 @@ export default {
   	name: 'import-instruction',
   	data () {
 	    return {
-	      	msg: ''
+	      	fileinput: ''
 	    }
+  	},
+  	methods: {
+  		onFileChange(e) {
+  		// var formData = new FormData(this.el);
+	      var files = e.target.files || e.dataTransfer.files;
+	      if (!files.length) return;
+	      this.createInput(files[0]);
+	    },
+	    createInput(file) {
+			var reader = new FileReader();
+			var vm = this;
+			reader.onload = (e) => {
+				vm.fileinput = reader.result;
+			}
+			reader.readAsText(file);
+			setTimeout(function(){
+				vm.$http.get('/static/demo.json')
+				// vm.$http.post('/static/demo.json', {
+				// 	fileInput: vm.fileinput
+				// })
+				.then(function (response) {
+					if (response.data.code == 1) {
+		    			vm.$nextTick(function () {
+							// console.log(response.data.msg);
+							alert(response.data.msg);
+		    			})
+		    		}
+				})
+				.catch(function (error) {
+					console.log(error);
+				});
+			}, 100);
+        }
+  	},
+  	watch: {
+  		fileinput (){
+  			console.log(this.fileinput);
+  		}
   	}
 }
 </script>
