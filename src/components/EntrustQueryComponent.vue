@@ -33,11 +33,28 @@
           <td>{{ item.OrderAmount }}</td>
           <td>{{ item.MatchAmount }}</td>
           <td>{{ item.EntrStat.default }}<br/>{{ item.EntrStat.lang }}</td>
-          <td style="color: #24B1F7;">{{ item.OrderNumber }}</td>
+          <td style="color: #24B1F7; cursor: pointer;" @click="showPopUp(item.OrderNumber)">{{ item.OrderNumber }}</td>
           <td>{{ item.Remark }}</td>
         </tr>
       </tbody>
     </table>
+
+    <pop-up v-if="showPopUpState" @close-tc="closePopUp">
+      <div slot="content">
+        <table cellpadding="0" cellspacing="0">
+          <thead>
+            <tr>
+              <th v-for="item of itemOrderPopUpData">{{ item.state }}<br/> {{ item.lang }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td v-for="item of itemOrderPopUpData">{{ item.content }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </pop-up>
   </div>
 </template>
 
@@ -45,16 +62,19 @@
 //引入全局过滤器
 import currencyFormatter from '@/filter/currencyFormatter'
 import plusOrReduce from '@/components/common/plusOrReduce'
+//引入弹窗组件
+import PopUp from '@/components/common/PopUp'
 
 export default {
   components: {
     currencyFormatter,
-    plusOrReduce
+    plusOrReduce,
+    PopUp
   },
   name: 'entrust-query',
   data () {
     return {
-
+      showPopUpState: false,
       tableData: {
         tHead: [
           {
@@ -236,8 +256,63 @@ export default {
                 Remark: 'auto_order'
             }
         ]
+      },
+
+      itemOrderPopUpData: {
+        orderNum: {
+          state: '指令编号',
+          lang: 'Order Number',
+          content: ''
+        },
+        orderTime: {
+          state: '下达时间',
+          lang: 'Order Time',
+          content: ''
+        },
+        orderContent: {
+          state: '指令内容',
+          lang: 'Order Content',
+          content: ''
+        },
+        runStatus: {
+          state: '执行状态',
+          lang: 'Run Status',
+          content: ''
+        }
       }
 
+    }
+  },
+  methods: {
+    showPopUp(order){
+      this.showPopUpState = true;
+
+      //这里需要用axios的post请求，把当前的order-number发给后台，让后台返回数据（下面代码仅仅是模拟）
+      this.itemOrderPopUpData = {
+        orderNum: {
+          state: '指令编号',
+          lang: 'Order Number',
+          content: '170525fl35343'
+        },
+        orderTime: {
+          state: '下达时间',
+          lang: 'Order Time',
+          content: '2017-05-25 9:33:35'
+        },
+        orderContent: {
+          state: '指令内容',
+          lang: 'Order Content',
+          content: '黄金延期Au(T+D)，价格p>=279.00，多开(buy long) 10手，279.60'
+        },
+        runStatus: {
+          state: '执行状态',
+          lang: 'Run Status',
+          content: '10:30触发，已发出委托'
+        }
+      };
+    },
+    closePopUp(){
+      this.showPopUpState = false;
     }
   }
 }

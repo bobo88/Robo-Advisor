@@ -42,10 +42,31 @@
           <td>{{ item.OrderPrice }}</td>
           <td>{{ item.OrderAmount }}</td>
           <td>{{ item.Deadline }}</td>
-          <td :class="{'f-blue': item.Remark.succ }">{{ item.Remark.text }}</td>
+
+          <td v-if="item.Remark.succ" class="f-blue" @click="showPopUp(item.OrderNumber)">{{ item.Remark.text }}</td>
+          <td v-else>{{ item.Remark.text }}</td>
+
         </tr>
       </tbody>
     </table>
+
+    <pop-up v-if="showPopUpState" @close-tc="closePopUp">
+      <div slot="content">
+        <table cellpadding="0" cellspacing="0">
+          <thead>
+            <tr>
+              <th v-for="item of itemOrderPopUpData">{{ item.state }}<br/> {{ item.lang }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td v-for="item of itemOrderPopUpData">{{ item.content }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </pop-up>
+
   </div>
 </template>
 
@@ -53,11 +74,14 @@
 //引入全局过滤器
 import currencyFormatter from '@/filter/currencyFormatter'
 import plusOrReduce from '@/components/common/plusOrReduce'
+//引入弹窗组件
+import PopUp from '@/components/common/PopUp'
 
 export default {
   components: {
     currencyFormatter,
-    plusOrReduce
+    plusOrReduce,
+    PopUp
   },
   name: 'query-orders-component',
   data () {
@@ -203,8 +227,83 @@ export default {
                 }
                 
             ]
-        }
+        },
 
+        showPopUpState: false,
+        itemOrderPopUpData: {
+          eExchTime: {
+            state: '委托时间',
+            lang: 'E Exch Time',
+            content: ''
+          },
+          prodCode: {
+            state: '合约',
+            lang: 'Prod Code',
+            content: ''
+          },
+          orderType: {
+            state: '委托类型',
+            lang: 'Order Type',
+            content: ''
+          },
+          orderPrice: {
+            state: '委托价格',
+            lang: 'Order Price',
+            content: ''
+          },
+          orderAmount: {
+            state: '委托数量',
+            lang: 'Order Amount',
+            content: ''
+          },
+          matchAmount: {
+            state: '成交数量',
+            lang: 'Match Amount',
+            content: ''
+          }
+        }
+    }
+  },
+  methods: {
+    showPopUp(order){
+      this.showPopUpState = true;
+
+      //这里需要用axios的post请求，把当前的order-number发给后台，让后台返回数据（下面代码仅仅是模拟）
+      this.itemOrderPopUpData = {
+        eExchTime: {
+          state: '委托时间',
+          lang: 'E Exch Time',
+          content: '9:35:26'
+        },
+        prodCode: {
+          state: '合约',
+          lang: 'Prod Code',
+          content: '迷你黄金延期Au(T+D)'
+        },
+        orderType: {
+          state: '委托类型',
+          lang: 'Order Type',
+          content: '多平'
+        },
+        orderPrice: {
+          state: '委托价格',
+          lang: 'Order Price',
+          content: '280.00'
+        },
+        orderAmount: {
+          state: '委托数量',
+          lang: 'Order Amount',
+          content: '20'
+        },
+        matchAmount: {
+          state: '成交数量',
+          lang: 'Match Amount',
+          content: '10'
+        }
+      };
+    },
+    closePopUp(){
+      this.showPopUpState = false;
     }
   }
 }
@@ -213,5 +312,5 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="less">
     .query-orders-component-summary{ padding: 14px 15px; height: 60px;}
-    .f-blue{ color: #24B1F7;}
+    .f-blue{ color: #24B1F7; cursor: pointer;}
 </style>
