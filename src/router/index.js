@@ -3,6 +3,8 @@ import Router from 'vue-router';
 
 //下达指令
 import IssueOrder from '@/components/issueOrder/IssueOrder';
+    import IssueOrderIndex from '@/components/issueOrder/IssueOrderIndex';
+    import ImportInstruction from '@/components/issueOrder/ImportInstruction';
 
 //查看指令
 import QueryOrders from '@/components/queryOrders/QueryOrders';
@@ -42,7 +44,19 @@ export default new Router({
     //下达指令
     {
     	path: '/issue-order',
-    	component: IssueOrder
+    	component: IssueOrder,
+        children: [
+            //下达指令首页
+            {
+                path: '/',
+                component: IssueOrderIndex
+            },
+            //导入指令
+            {
+                path: 'import-instruction',
+                component: ImportInstruction
+            }
+        ]   
     },
 
     //查看指令

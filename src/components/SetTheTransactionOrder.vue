@@ -8,7 +8,12 @@
   	<header class="table-common-head clearfix">
   		<span class="tit fl">设置交易指令 <br/> Set The Transaction Order</span>
   		<p class="import-instructions fr">
-  			<Button type="ghost" shape="circle">导入指令</Button>
+        <router-link to="/issue-order/import-instruction">
+          <span class="file-btn">导入指令</span>
+        </router-link>
+        <!-- <span class="file-btn">导入指令</span> -->
+        <!-- <input id="fileId" type="file" name="file" style="display:none;" />
+  			<label for="fileId"><span class="file-btn">导入指令</span></label> -->
   		</p>
   	</header>
 
@@ -193,7 +198,7 @@ export default {
 <style scoped lang="less">
 	.set-the-transaction-order{
     .import-instructions{ padding: 14px 15px; height: 60px; line-height: 32px;
-      .ivu-btn-ghost{ color: #8598CB; border-color: #8598CB; font-size: 14px;
+      .file-btn{ margin-bottom: 0; font-weight: 400; text-align: center; vertical-align: middle; -ms-touch-action: manipulation; touch-action: manipulation; cursor: pointer; background-image: none; border: 1px solid transparent; white-space: nowrap; line-height: 1.5; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; padding: 6px 15px; font-size: 12px; border-radius: 4px; transition: color .2s linear,background-color .2s linear,border .2s linear; color: #495060; border-color: #dddee1; display: inline-block; color: #8598CB; border-color: #8598CB; font-size: 14px;
         &:hover{ color: #fff; background-image: linear-gradient(90deg, #6F64FF 0%, #B93BFB 100%);}
       }
     }
