@@ -5,7 +5,7 @@
 -->
 <template>
   <div class="left">
-    <h1 class="logo"><a href="http://www.yuanbo88.com/"><img src="../../assets/logo.png"></a></h1>
+    <h1 class="logo"><img src="../../assets/logo.png"></h1>
 
     <ul class="nav-list">
       <!-- <li>下达指令</li> -->
@@ -62,7 +62,11 @@ export default {
           "url": "/simulated-account",
           "icon": "icon-monizhanghu",
           "sortChild": [
-            {"tit": "账户概要", "url": "/simulated-account/account-information", "en": "Account Information"}
+            {"tit": "账户概要", "url": "/simulated-account/simulation-account-information", "en": "Account Information"},
+            {"tit": "成交查询", "url": "/simulated-account/simulation-transaction-query", "en": "Transaction Query"},
+            {"tit": "委托查询", "url": "/simulated-account/simulation-entrust-query", "en": "Entrust Query"},
+            {"tit": "历史持仓", "url": "/simulated-account/simulation-historical-position-query", "en": "Historical Position Query"},
+            {"tit": "收益走势", "url": "/simulated-account/simulation-curve-of-refum", "en": "Curve Of Refum"}
           ]
         },
         {

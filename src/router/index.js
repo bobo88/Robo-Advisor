@@ -24,7 +24,16 @@ import QueryAccount from '@/components/queryAccount/QueryAccount';
 
 //模拟账户
 import SimulatedAccount from '@/components/simulatedAccount/SimulatedAccount';
-	import AccountInformation from '@/components/simulatedAccount/AccountInformation';
+    //账户概要
+    import SimulationAccountInformation from '@/components/simulatedAccount/SimulationAccountInformation';
+    //成交查询
+    import SimulationTransactionQuery from '@/components/simulatedAccount/SimulationTransactionQuery';
+    //委托查询
+    import SimulationEntrustQuery from '@/components/simulatedAccount/SimulationEntrustQuery';
+    //历史持仓
+    import SimulationHistoricalPositionQuery from '@/components/simulatedAccount/SimulationHistoricalPositionQuery';
+    //收益走势
+    import SimulationCurveOfRefum from '@/components/simulatedAccount/SimulationCurveOfRefum';
 
 //行情数据
 import DataOfQuotation from '@/components/dataOfQuotation/DataOfQuotation';
@@ -101,19 +110,41 @@ export default new Router({
     		}
     	]	
     },
-
+    
     //模拟账户
     {
-    	path: '/simulated-account',
-    	component: SimulatedAccount,
-    	redirect: '/simulated-account/account-information',
-    	children: [
-    		//账户概要
-    		{
-    			path: 'account-information',
-    			component: AccountInformation
-    		}
-    	]
+        path: '/simulated-account',
+        component: SimulatedAccount,
+        redirect: '/simulated-account/simulation-account-information',
+        children: [
+            //账户概要
+            {
+                path: 'simulation-account-information',
+                component: SimulationAccountInformation
+            },
+            //成交查询
+            {
+                path: 'simulation-transaction-query',
+                component: SimulationTransactionQuery
+            },
+
+            //委托查询
+            {
+                path: 'simulation-entrust-query',
+                component: SimulationEntrustQuery
+            },
+
+            // 历史持仓
+            {
+                path: 'simulation-historical-position-query',
+                component: SimulationHistoricalPositionQuery
+            },
+            // 收益走势
+            {
+                path: 'simulation-curve-of-refum',
+                component: SimulationCurveOfRefum
+            }
+        ]
     },
 
     //行情数据
