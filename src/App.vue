@@ -105,7 +105,7 @@ strong{ font-weight: normal;}
   /* iview 修改默认样式 */
   .ivu-select-selection{ color: #90A4D9; background: none;}
   .ivu-input{ color: #90A4D9; background: none;}
-  .ivu-btn-ghost{ color: #90A4D9; border: 1px solid #90a4d9;}
+  .ivu-btn-ghost{ color: #fff; border: 1px solid #90a4d9;}
   .ivu-date-picker{ color: #333;}
   .ivu-tooltip-inner{ max-width: 400px;}
 }
