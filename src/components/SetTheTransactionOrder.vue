@@ -236,7 +236,7 @@ export default {
     submitTransactionOrder(){
       if(!!this.bs && !!this.entrAmount && !!this.entrPrice && !!this.offsetFlag && !!this.orderDeadlineFarmatter && !!this.prodCode && !!this.tradeSignalCond && !!this.tradeSignalType && !!this.tradeSignalValue ){
 
-        this.$http.post('/marketOrder/issueOrder', {
+        var params = {
           bs: this.bs,
           entrAmount: parseFloat(this.entrAmount),
           entrPrice: parseFloat(this.entrPrice),
@@ -246,6 +246,10 @@ export default {
           tradeSignalCond: parseFloat(this.tradeSignalCond),
           tradeSignalType: parseFloat(this.tradeSignalType),
           tradeSignalValue: parseFloat(this.tradeSignalValue)
+        };
+
+        this.$http.post('/api/marketOrder/issueOrder', {
+          params: params
         })
         .then(function (response) {
           console.log(response);

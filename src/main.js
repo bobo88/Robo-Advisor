@@ -11,6 +11,13 @@ import 'iview/dist/styles/iview.css'    // 使用 CSS
 Vue.use(iView);
 Vue.prototype.$http = axios;
 
+axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;';
+
+// Vue.prototype.baseURL = '/api';
+// Vue.prototype.$http.headers = {
+//   'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+// };
+
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */
