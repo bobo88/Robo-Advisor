@@ -103,6 +103,7 @@
 
 <script>
 //引入全局过滤器
+import axios from "axios"
 import timeFormatter from '@/filter/timeFormatter'
 import plusOrReduce from '@/components/common/plusOrReduce'
 
@@ -248,8 +249,11 @@ export default {
           tradeSignalValue: parseFloat(this.tradeSignalValue)
         };
 
-        this.$http.post('/api/marketOrder/issueOrder', {
-          params: params
+        this.$http.post({
+          method: 'post',
+          url: '/api/marketOrder/issueOrder',
+          params: params,
+          headers: {'Content-Type': 'application/x-www-form-urlencoded'},
         })
         .then(function (response) {
           console.log(response);
