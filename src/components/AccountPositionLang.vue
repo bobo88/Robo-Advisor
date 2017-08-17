@@ -28,8 +28,8 @@
         <tr v-for="item in simulatedData">
           <td>{{ item.spotName }}</td>
           <td>{{ item.positionType == '1' ? '多' : '空' }}</td>
-          <td>{{ item.positionAmount | currencyFormatter }}</td>
-          <td>{{ item.availableAmount | currencyFormatter }}</td>
+          <td>{{ item.positionAmount }}</td>
+          <td>{{ item.availableAmount }}</td>
           <td>{{ item.currentPrice | currencyFormatter }}</td>
           <td>{{ item.averageCost | currencyFormatter }}</td>
           <td><plus-or-reduce-state :obj="item.floatingReturn"></plus-or-reduce-state></td>
