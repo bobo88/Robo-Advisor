@@ -8,10 +8,10 @@
   	<header class="table-common-head clearfix">
   		<span class="tit fl">委托查询 <br/> Entrust Query</span>
   		<div class="entrust-query-summary fr">
-  			<Date-picker type="date" placeholder="选择日期" style="width: 140px" placement="bottom-end" class="mr10"></Date-picker>
+  			<Date-picker type="date" v-model="start_date" placeholder="选择日期" style="width: 140px" placement="bottom-end" class="mr10"></Date-picker>
         <span class="mr10">至</span>
-        <Date-picker type="date" placeholder="选择日期" style="width: 140px" placement="bottom-end" class="mr10"></Date-picker>
-        <Button type="info" shape="circle" style="width: 70px" class="mr10">查询</Button>
+        <Date-picker type="date" v-model="end_date" placeholder="选择日期" style="width: 140px" placement="bottom-end" class="mr10"></Date-picker>
+        <Button type="info" shape="circle" style="width: 70px" class="mr10" @click="searchData">查询</Button>
   		</div>
   	</header>
 
@@ -24,19 +24,25 @@
           </th>  
         </tr>
       </thead>
-      <tbody>
-        <tr v-for="item in tableData.tDataList">
-          <td>{{ item.E_exchTime }}</td>
-          <td>{{ item.ProdCode }}</td>
-          <td>{{ item.OrderType }}</td>
-          <td>{{ item.OrderPrice | currencyFormatter }}</td>
-          <td>{{ item.OrderAmount }}</td>
-          <td>{{ item.MatchAmount }}</td>
-          <td>{{ item.EntrStat.default }}<br/>{{ item.EntrStat.lang }}</td>
-          <td style="color: #24B1F7; cursor: pointer;" @click="showPopUp(item.OrderNumber)">{{ item.OrderNumber }}</td>
-          <td>{{ item.Remark }}</td>
+      <tbody v-if="simulatedData.length > 0">
+        <tr v-for="item in simulatedData" >
+          <td>{{ item.eExchTime }}</td>
+          <td>{{ item.prodCode }}</td>
+          <td>{{ item.orderType }}</td>
+          <td>{{ item.orderPrice | currencyFormatter }}</td>
+          <td>{{ item.orderAmount }}</td>
+          <td>{{ item.matchAmount }}</td>
+          <td>{{ item.entrStat }}</td>
+          <td style="color: #24B1F7; cursor: pointer;" @click="showPopUp(item.orderNumber)">{{ item.orderNumber }}</td>
         </tr>
       </tbody>
+
+      <tbody v-else>
+        <tr>
+          <td colspan="8">暂无数据</td>
+        </tr>
+      </tbody>
+      
     </table>
 
     <pop-up v-if="showPopUpState" @close-tc="closePopUp">
@@ -65,6 +71,28 @@ import plusOrReduce from '@/components/common/plusOrReduce'
 //引入弹窗组件
 import PopUp from '@/components/common/PopUp'
 
+function formatTime(s) {
+    if(!s){
+        return;
+    }
+    var _str = [];
+
+    //年yyyy
+    _str[0] = s.getFullYear();
+    //月MM
+    s.getMonth() >= 9 ? _str[1] = s.getMonth()+1 : _str[1] = '0' + (s.getMonth()+1);
+    //日dd
+    s.getDate() > 9 ? _str[2] = s.getDate() : _str[2] = '0' + s.getDate();
+    //小时HH
+    s.getHours() > 9 ? _str[3] = s.getHours() : _str[3] = '0' + s.getHours();
+    //分钟mm
+    s.getMinutes() > 9 ? _str[4] = s.getMinutes() : _str[4] = '0' + s.getMinutes();
+    //秒钟ss
+    s.getSeconds() > 9 ? _str[5] = s.getSeconds() : _str[5] = '0' + s.getSeconds();
+    
+    return _str.join('');
+}
+
 export default {
   components: {
     currencyFormatter,
@@ -75,6 +103,15 @@ export default {
   data () {
     return {
       showPopUpState: false,
+      end_date: '', //结束日期
+      h_query_num: 5, //每页记录数
+      h_start_num: 1, //当前第几页
+      start_date: '', //开始日期
+      trading_token: 'xx', //交易token
+
+      //数据
+      simulatedData: [],
+
       tableData: {
         tHead: [
           {
@@ -108,153 +145,7 @@ export default {
           {
               title: '对应指令编号',
               lang: 'Order Number'
-          },
-          {
-              title: '来源备注',
-              lang: 'Remark'
           }
-        ],
-        tDataList:[
-            {
-                E_exchTime: '2017-05-25 9:23:35',
-                ProdCode: '黄金延期Au(T+D)',
-                OrderType: '多开(Buy Long)',
-                OrderPrice: 282.34,
-                OrderAmount: 10,
-                MatchAmount: 10,
-                EntrStat: {
-                  "default": '全部成交',
-                  "lang": 'All Succeeded'
-                },
-                OrderNumber: '170525dk0234',
-                Remark: 'auto_order'
-            },
-            {
-                E_exchTime: '2017-05-25 9:23:35',
-                ProdCode: '白银延期Au(T+D)',
-                OrderType: '多开(Buy Long)',
-                OrderPrice: 50,
-                OrderAmount: 390,
-                MatchAmount: 280,
-                EntrStat: {
-                  "default": '部分剩撤',
-                  "lang": 'Partly Succeeded'
-                },
-                OrderNumber: '170525dk0234',
-                Remark: 'auto_order'
-            },
-            {
-                E_exchTime: '2017-05-25 9:23:35',
-                ProdCode: '迷你黄金延期Au(T+D)',
-                OrderType: '空平(Close Short)',
-                OrderPrice: 282.34,
-                OrderAmount: 5,
-                MatchAmount: 10,
-                EntrStat: {
-                  "default": '全部成交',
-                  "lang": 'All Succeeded'
-                },
-                OrderNumber: '170525dk0234',
-                Remark: 'auto_order'
-            },
-            {
-                E_exchTime: '2017-05-25 9:23:35',
-                ProdCode: '黄金延期Au(T+D)',
-                OrderType: '多开(Buy Long)',
-                OrderPrice: 282.34,
-                OrderAmount: 10,
-                MatchAmount: 10,
-                EntrStat: {
-                  "default": '全部成交',
-                  "lang": 'All Succeeded'
-                },
-                OrderNumber: '170525dk0234',
-                Remark: 'auto_order'
-            },
-            {
-                E_exchTime: '2017-05-25 9:23:35',
-                ProdCode: '白银延期Au(T+D)',
-                OrderType: '多开(Buy Long)',
-                OrderPrice: 50,
-                OrderAmount: 390,
-                MatchAmount: 280,
-                EntrStat: {
-                  "default": '部分剩撤',
-                  "lang": 'Partly Succeeded'
-                },
-                OrderNumber: '170525dk0234',
-                Remark: 'auto_order'
-            },
-            {
-                E_exchTime: '2017-05-25 9:23:35',
-                ProdCode: '迷你黄金延期Au(T+D)',
-                OrderType: '空平(Close Short)',
-                OrderPrice: 282.34,
-                OrderAmount: 5,
-                MatchAmount: 10,
-                EntrStat: {
-                  "default": '全部成交',
-                  "lang": 'All Succeeded'
-                },
-                OrderNumber: '170525dk0234',
-                Remark: 'auto_order'
-            },
-            {
-                E_exchTime: '2017-05-25 9:23:35',
-                ProdCode: '黄金延期Au(T+D)',
-                OrderType: '多开(Buy Long)',
-                OrderPrice: 282.34,
-                OrderAmount: 10,
-                MatchAmount: 10,
-                EntrStat: {
-                  "default": '全部成交',
-                  "lang": 'All Succeeded'
-                },
-                OrderNumber: '170525dk0234',
-                Remark: 'auto_order'
-            },
-            {
-                E_exchTime: '2017-05-25 9:23:35',
-                ProdCode: '白银延期Au(T+D)',
-                OrderType: '多开(Buy Long)',
-                OrderPrice: 50,
-                OrderAmount: 390,
-                MatchAmount: 280,
-                EntrStat: {
-                  "default": '部分剩撤',
-                  "lang": 'Partly Succeeded'
-                },
-                OrderNumber: '170525dk0234',
-                Remark: 'auto_order'
-            },
-            {
-                E_exchTime: '2017-05-25 9:23:35',
-                ProdCode: '迷你黄金延期Au(T+D)',
-                OrderType: '空平(Close Short)',
-                OrderPrice: 282.34,
-                OrderAmount: 5,
-                MatchAmount: 10,
-                EntrStat: {
-                  "default": '全部成交',
-                  "lang": 'All Succeeded'
-                },
-                OrderNumber: '170525dk0234',
-                Remark: 'auto_order'
-            },
-            {
-                E_exchTime: '2017-05-25 9:23:35',
-                ProdCode: '黄金延期Au(T+D)',
-                OrderType: '多开(Buy Long)',
-                OrderPrice: 282.34,
-                OrderAmount: 88,
-                MatchAmount: 12,
-                EntrStat: {
-                  "default": '全部成交',
-                  "lang": 'All Succeeded'
-                },
-                OrderNumber: '170525dk0234',
-                Remark: 'auto_order'
-            }
         ]
       },
 
@@ -281,6 +172,16 @@ export default {
         }
       }
 
+    }
+  },
+  computed: {
+    startDateFarmatter() {
+      var s = this.start_date;
+      return formatTime(s);
+    },
+    endDateFarmatter() {
+      var s = this.end_date;
+      return formatTime(s);
     }
   },
   methods: {
@@ -313,6 +214,34 @@ export default {
     },
     closePopUp(){
       this.showPopUpState = false;
+    },
+    searchData(){
+
+      var vm = this;
+      var params = {
+        end_date: this.endDateFarmatter, //结束日期
+        h_query_num: this.h_query_num, //每页记录数
+        h_start_num: this.h_start_num, //当前第几页
+        start_date: this.startDateFarmatter, //开始日期
+        trading_token: this.trading_token, //交易token
+      };
+
+      if(!!this.end_date && !!this.h_query_num && !!this.h_start_num && !!this.start_date && !!this.trading_token){
+        this.$http({
+          method: 'post',
+          url: '/api/marketSimulated/historyEntrust',
+          params: params,
+          headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+        })
+        .then(function (response) {
+          if(response.data.code === 100){
+            vm.simulatedData = response.data.data;
+          }
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+      }
     }
   }
 }

@@ -26,7 +26,7 @@
           </th>  
         </tr>
       </thead>
-      <tbody>
+      <tbody v-if="simulatedData.length > 0">
         <tr v-for="item in simulatedData">
           <td>{{ item.tradeTime }}</td>
           <td>{{ item.spotName }}</td>
@@ -36,6 +36,13 @@
           <td style="color: #24B1F7; cursor: pointer;" @click="showPopUp(item.orderNumber)">{{ item.orderNumber }}</td>
         </tr>
       </tbody>
+
+      <tbody v-else>
+        <tr>
+          <td colspan="8">暂无数据</td>
+        </tr>
+      </tbody>
+      
     </table>
 
     <pop-up v-if="showPopUpState" @close-tc="closePopUp">
