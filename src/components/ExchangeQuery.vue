@@ -8,12 +8,14 @@
   	<header class="table-common-head clearfix">
   		<span class="tit fl">成交查询 <br/> Exchange Query</span>
   		<div class="exchange-query-summary fr">
-  			<Date-picker type="date" placeholder="选择日期" style="width: 140px" placement="bottom-end" class="mr10"></Date-picker>
+  			<Date-picker type="date" v-model="start_date" placeholder="选择日期" style="width: 140px" placement="bottom-end" class="mr10"></Date-picker>
         <span class="mr10">至</span>
-        <Date-picker type="date" placeholder="选择日期" style="width: 140px" placement="bottom-end" class="mr10"></Date-picker>
-        <Button type="info" shape="circle" style="width: 70px" class="mr10">查询</Button>
+        <Date-picker type="date" v-model="end_date" placeholder="选择日期" style="width: 140px" placement="bottom-end" class="mr10"></Date-picker>
+        <Button type="info" shape="circle" style="width: 70px" class="mr10" @click="searchData">查询</Button>
   		</div>
   	</header>
+
+    
 
     <table cellpadding="0" cellspacing="0" class="table-common-main-lang">
       <thead>
@@ -25,15 +27,13 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="item in tableData.tDataList">
-          <td>{{ item.TradeTime }}</td>
-          <td>{{ item.SpotName }}</td>
-          <td>{{ item.TradeType }}</td>
-          <td>{{ item.TradePrice | currencyFormatter }}</td>
-          <td>{{ item.TradeVolume }}</td>
-          <td style="color: #24B1F7; cursor: pointer;" @click="showPopUp(item.Order)">{{ item.Order }}</td>
-          <td><plus-or-reduce :obj="item.ChangeFund"></plus-or-reduce></td>
-          <td><plus-or-reduce :obj="item.TradeCost"></plus-or-reduce></td>
+        <tr v-for="item in simulatedData">
+          <td>{{ item.tradeTime }}</td>
+          <td>{{ item.spotName }}</td>
+          <td>{{ item.tradeType }}</td>
+          <td>{{ item.tradePrice | currencyFormatter }}</td>
+          <td>{{ item.tradeVolume }}</td>
+          <td style="color: #24B1F7; cursor: pointer;" @click="showPopUp(item.orderNumber)">{{ item.orderNumber }}</td>
         </tr>
       </tbody>
     </table>
@@ -64,20 +64,50 @@
 <script>
 //引入全局过滤器
 import currencyFormatter from '@/filter/currencyFormatter'
-import plusOrReduce from '@/components/common/plusOrReduce'
+import plusOrReduceState from '@/components/common/plusOrReduceState'
 //引入弹窗组件
 import PopUp from '@/components/common/PopUp'
+
+function formatTime(s) {
+    if(!s){
+        return;
+    }
+    var _str = [];
+
+    //年yyyy
+    _str[0] = s.getFullYear();
+    //月MM
+    s.getMonth() >= 9 ? _str[1] = s.getMonth()+1 : _str[1] = '0' + (s.getMonth()+1);
+    //日dd
+    s.getDate() > 9 ? _str[2] = s.getDate() : _str[2] = '0' + s.getDate();
+    //小时HH
+    s.getHours() > 9 ? _str[3] = s.getHours() : _str[3] = '0' + s.getHours();
+    //分钟mm
+    s.getMinutes() > 9 ? _str[4] = s.getMinutes() : _str[4] = '0' + s.getMinutes();
+    //秒钟ss
+    s.getSeconds() > 9 ? _str[5] = s.getSeconds() : _str[5] = '0' + s.getSeconds();
+    
+    return _str.join('');
+}
 
 export default {
   components: {
     currencyFormatter,
-    plusOrReduce,
+    plusOrReduceState,
     PopUp
   },
   name: 'exchange-query',
   data () {
     return {
       showPopUpState: false,
+      end_date: '', //结束日期
+      h_query_num: 5, //每页记录数
+      h_start_num: 1, //当前第几页
+      start_date: '', //开始日期
+      trading_token: 'xx', //交易token
+
+      //数据
+      simulatedData: [],
 
       tableData: {
         tHead: [
@@ -103,82 +133,8 @@ export default {
           },
           {
               title: '对应指令编号',
-              lang: 'Order'
-          },
-          {
-              title: '变动资金',
-              lang: 'Change Fund'
-          },
-          {
-              title: '交易费用',
-              lang: 'Trade Cost'
+              lang: 'Order Number'
           }
-        ],
-        tDataList:[
-            {
-                TradeTime: '2017-05-25 9:23:35',
-                SpotName: '黄金延期Au(T+D)',
-                TradeType: '多开(Buy Long)',
-                TradePrice: 282.34,
-                TradeVolume: 10,
-                Order: '170525dk0234',
-                ChangeFund: {
-                  "status": 'reduce',
-                  "num": 282340
-                },
-                TradeCost: {
-                    "status": 'reduce',
-                    "num": 230.56
-                }
-            },
-            {
-                TradeTime: '2017-05-25 9:23:35',
-                SpotName: '白银延期Au(T+D)',
-                TradeType: '多开(Buy Long)',
-                TradePrice: 282.34,
-                TradeVolume: 50,
-                Order: '170525dk0234',
-                ChangeFund: {
-                  "status": 'plus',
-                  "num": 4353523
-                },
-                TradeCost: {
-                    "status": 'plus',
-                    "num": 254.56
-                }
-            },
-            {
-                TradeTime: '2017-05-25 9:23:35',
-                SpotName: '迷你黄金延期Au(T+D)',
-                TradeType: '空平(Close Short)',
-                TradePrice: 282.34,
-                TradeVolume: 100,
-                Order: '170525dk0234',
-                ChangeFund: {
-                  "status": 'plus',
-                  "num": 2823457
-                },
-                TradeCost: {
-                    "status": 'plus',
-                    "num": 344646.56
-                }
-            },
-            {
-                TradeTime: '2017-05-25 9:23:35',
-                SpotName: '黄金延期Au(T+D)',
-                TradeType: '多开(Buy Long)',
-                TradePrice: 282.34,
-                TradeVolume: 60,
-                Order: '170525dk0234',
-                ChangeFund: {
-                  "status": 'plus',
-                  "num": 28255340
-                },
-                TradeCost: {
-                    "status": 'plus',
-                    "num": 33440.56
-                }
-            }
         ]
       },
 
@@ -204,6 +160,19 @@ export default {
           content: ''
         }
       }
+    }
+  },
+  mounted: function(){
+    // alert(2);
+  },
+  computed: {
+    startDateFarmatter() {
+      var s = this.start_date;
+      return formatTime(s);
+    },
+    endDateFarmatter() {
+      var s = this.end_date;
+      return formatTime(s);
     }
   },
   methods: {
@@ -236,6 +205,34 @@ export default {
     },
     closePopUp(){
       this.showPopUpState = false;
+    },
+    searchData(){
+
+      var vm = this;
+      var params = {
+        end_date: this.endDateFarmatter, //结束日期
+        h_query_num: this.h_query_num, //每页记录数
+        h_start_num: this.h_start_num, //当前第几页
+        start_date: this.startDateFarmatter, //开始日期
+        trading_token: this.trading_token, //交易token
+      };
+
+      if(!!this.end_date && !!this.h_query_num && !!this.h_start_num && !!this.start_date && !!this.trading_token){
+        this.$http({
+          method: 'post',
+          url: '/api/marketSimulated/currentTurnoverJournal',
+          params: params,
+          headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+        })
+        .then(function (response) {
+          if(response.data.code === 100){
+            vm.simulatedData = response.data.data;
+          }
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+      }
     }
   }
 }
