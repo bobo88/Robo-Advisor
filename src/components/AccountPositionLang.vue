@@ -1,7 +1,7 @@
 <!--
 内容：账户持仓页面
 作者：BOBO
-日期： 20170802
+日期： 20170817
 -->
 <template>
   <div class="account-position-lang mb30">
@@ -25,15 +25,15 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="item in tableData.tDataList">
+        <tr v-for="item in simulatedData">
           <td>{{ item.spotName }}</td>
-          <td>{{ item.positionType }}</td>
+          <td>{{ item.positionType == '1' ? '多' : '空' }}</td>
           <td>{{ item.positionAmount | currencyFormatter }}</td>
           <td>{{ item.availableAmount | currencyFormatter }}</td>
           <td>{{ item.currentPrice | currencyFormatter }}</td>
           <td>{{ item.averageCost | currencyFormatter }}</td>
-          <td><plus-or-reduce :obj="item.floatingReturn"></plus-or-reduce></td>
-          <td><plus-or-reduce :obj="item.returnRatio" :percentage="true"></plus-or-reduce></td>
+          <td><plus-or-reduce-state :obj="item.floatingReturn"></plus-or-reduce-state></td>
+          <td>{{ item.markDay }}</td>
         </tr>
       </tbody>
     </table>
@@ -43,17 +43,18 @@
 <script>
 //引入全局过滤器
 import currencyFormatter from '@/filter/currencyFormatter'
-import plusOrReduce from '@/components/common/plusOrReduce'
+import plusOrReduceState from '@/components/common/plusOrReduceState'
 
 export default {
   components: {
     currencyFormatter,
-    plusOrReduce
+    plusOrReduceState
   },
   name: 'account-position-lang',
   props: ['headSummary'], // 父组件传headSummary属性过来，如果为false，则不显示账户持仓组件头部右边内容
   data () {
     return {
+      simulatedData: [],
 
       tableData: {
         tHead: [
@@ -86,79 +87,32 @@ export default {
               lang: 'Floating Return'
           },
           {
-              title: '盈亏比例',
-              lang: 'Return Ratio'
+              title: '交易日',
+              lang: 'Mark Day'
           }
-        ],
-        tDataList:[
-            {
-                spotName: '黄金延期',
-                positionType: '多',
-                positionAmount: 30,
-                availableAmount: 25,
-                currentPrice: 281.30,
-                averageCost: 261.30,
-                floatingReturn: {
-                  "status": 'plus',
-                  "num": 24400.00
-                },
-                returnRatio: {
-                    "status": 'plus',
-                    "num": 12
-                }
-            },
-            {
-                spotName: '白银延期',
-                positionType: '多',
-                positionAmount: 30,
-                availableAmount: 25,
-                currentPrice: 281.30,
-                averageCost: 261.30,
-                floatingReturn: {
-                  "status": 'reduce',
-                  "num": 900.00
-                },
-                returnRatio: {
-                    "status": 'plus',
-                    "num": 12
-                }
-            },
-            {
-                spotName: '迷你黄金延期',
-                positionType: '多',
-                positionAmount: 30,
-                availableAmount: 25,
-                currentPrice: 281.30,
-                averageCost: 261.30,
-                floatingReturn: {
-                  "status": 'plus',
-                  "num": 24400.00
-                },
-                returnRatio: {
-                    "status": 'plus',
-                    "num": 12
-                }
-            },
-            {
-                spotName: '黄金延期',
-                positionType: '多',
-                positionAmount: 30777,
-                availableAmount: 25556,
-                currentPrice: 281.30,
-                averageCost: 261.30,
-                floatingReturn: {
-                  "status": 'plus',
-                  "num": 24400.00
-                },
-                returnRatio: {
-                    "status": 'reduce',
-                    "num": 0.05
-                }
-            }
         ]
       }
 
     }
+  },
+  mounted: function(){
+    var vm = this;
+    var params = {trading_token: 'xx'};
+
+    this.$http({
+      method: 'post',
+      url: '/api/marketSimulated/currentPosition',
+      params: params,
+      headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+    })
+    .then(function (response) {
+      if(response.data.code === 100){
+        vm.simulatedData = response.data.data;
+      }
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
   }
 }
 </script>
