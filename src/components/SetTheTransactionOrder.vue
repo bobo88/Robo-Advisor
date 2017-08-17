@@ -98,6 +98,8 @@
 
       </tbody>
     </table>
+
+    <msg :msg="msgCont" v-if="showMsgState" @close-tc="closeMsg"></msg>
   </div>
 </template>
 
@@ -106,11 +108,13 @@
 import axios from "axios"
 import timeFormatter from '@/filter/timeFormatter'
 import plusOrReduce from '@/components/common/plusOrReduce'
+import Msg from '@/components/common/Msg'
 
 export default {
   components: {
     timeFormatter,
-    plusOrReduce
+    plusOrReduce,
+    Msg
   },
   name: 'set-the-transaction-order',
   data () {
@@ -194,7 +198,10 @@ export default {
             value: '下午',
             label: '下午'
         }
-      ]
+      ],
+
+      msgCont: '',
+      showMsgState: false
     }
   },
   computed: {
@@ -235,6 +242,7 @@ export default {
       }
     },
     submitTransactionOrder(){
+      var vm = this;
       if(!!this.bs && !!this.entrAmount && !!this.entrPrice && !!this.offsetFlag && !!this.orderDeadlineFarmatter && !!this.prodCode && !!this.tradeSignalCond && !!this.tradeSignalType && !!this.tradeSignalValue ){
 
         var params = {
@@ -242,26 +250,34 @@ export default {
           entrAmount: parseFloat(this.entrAmount),
           entrPrice: parseFloat(this.entrPrice),
           offsetFlag: parseFloat(this.offsetFlag),
-          orderDeadlineFarmatter: this.orderDeadlineFarmatter,
+          orderDeadline: this.orderDeadlineFarmatter,
           prodCode: this.prodCode,
           tradeSignalCond: parseFloat(this.tradeSignalCond),
           tradeSignalType: parseFloat(this.tradeSignalType),
           tradeSignalValue: parseFloat(this.tradeSignalValue)
         };
 
-        this.$http.post({
+        this.$http({
           method: 'post',
           url: '/api/marketOrder/issueOrder',
           params: params,
           headers: {'Content-Type': 'application/x-www-form-urlencoded'},
         })
         .then(function (response) {
-          console.log(response);
+          if(response.data.code === 100){
+            console.log(response);
+            // this.msg = response.data.message;
+            vm.msgCont = response.data.message;
+            vm.showMsgState = true;
+          }
         })
         .catch(function (error) {
           console.log(error);
         });
       }
+    },
+    closeMsg(){
+      this.showMsgState = false;
     }
   }
 }
