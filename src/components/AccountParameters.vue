@@ -21,7 +21,7 @@
       <tbody>
         <tr>
           <td>{{ simulatedData.totalAsset | currencyFormatter }}</td>
-          <td>{{ simulatedData.cumulativeReturn | currencyFormatter }}</td>
+          <td><plus-or-reduce-state :obj="simulatedData.cumulativeReturn"></plus-or-reduce-state></td>
           <td>{{ simulatedData.roa }}%</td>
           <td>{{ simulatedData.netWorthRate }}</td>
           <td><plus-or-reduce-state :obj="simulatedData.maxDrawdown" :percentage="true"></plus-or-reduce-state></td>

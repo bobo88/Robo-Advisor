@@ -14,7 +14,7 @@ Vue.filter("currencyFormatter", function(value) {
 
         if(/^-/.test(s)){
             pre = '-';
-            s = s.toString().replace(/^-(\d*)$/, "$1");
+            s = s.toString().replace('-', "");
         }
         if (/[^0-9\.]/.test(s))
             return "0";
