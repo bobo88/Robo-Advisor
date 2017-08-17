@@ -19,15 +19,15 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="item in tableData.tDataList">
-          <td>{{ item.totalAsset | currencyFormatter }}</td>
-          <td>{{ item.cumulativeReturn | currencyFormatter }}</td>
-          <td>{{ item.ROA }}%</td>
-          <td>{{ item.networthRate }}</td>
-          <td><plus-or-reduce :obj="item.maxDrawdown" :percentage="true"></plus-or-reduce></td>
-          <td>{{ item.sharpeRatio }}</td>
-          <td>{{ item.successRatio }}%</td>
-          <td>{{ item.positionRatio }}%</td>
+        <tr>
+          <td>{{ simulatedData.totalAsset | currencyFormatter }}</td>
+          <td>{{ simulatedData.cumulativeReturn | currencyFormatter }}</td>
+          <td>{{ simulatedData.roa }}%</td>
+          <td>{{ simulatedData.netWorthRate }}</td>
+          <td><plus-or-reduce-state :obj="simulatedData.maxDrawdown" :percentage="true"></plus-or-reduce-state></td>
+          <td>{{ simulatedData.sharpeRatio }}</td>
+          <td>{{ simulatedData.successRatio }}%</td>
+          <td>{{ simulatedData.positionRatio }}%</td>
         </tr>
       </tbody>
     </table>
@@ -42,15 +42,15 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="item in tableData2.tDataList">
-          <td><plus-or-reduce :obj="item.lastSurplus"></plus-or-reduce></td>
-          <td>{{ item.positionMargin | currencyFormatter }}</td>
-          <td>{{ item.availableFund | currencyFormatter }}</td>
-          <td>{{ item.frozenFund | currencyFormatter }}</td>
-          <td>{{ item.fundEfficiency }}%</td>
-          <td>{{ item.longPosition }}%</td>
-          <td>{{ item.shortPosition }}%</td>
-          <td><plus-or-reduce :obj="item.floatingReturn"></plus-or-reduce></td>
+        <tr>
+          <td><plus-or-reduce-state :obj="simulatedData.lastSurplus"></plus-or-reduce-state></td>
+          <td>{{ simulatedData.positionMargin | currencyFormatter }}</td>
+          <td>{{ simulatedData.availableFund | currencyFormatter }}</td>
+          <td>{{ simulatedData.frozenFund | currencyFormatter }}</td>
+          <td>{{ simulatedData.fundEfficiency }}%</td>
+          <td>{{ simulatedData.longPosition }}%</td>
+          <td>{{ simulatedData.shortPosition }}%</td>
+          <td><plus-or-reduce-state :obj="simulatedData.floatingReturn"></plus-or-reduce-state></td>
         </tr>
       </tbody>
     </table>
@@ -61,16 +61,17 @@
 <script>
 //引入全局过滤器
 import currencyFormatter from '@/filter/currencyFormatter'
-import plusOrReduce from '@/components/common/plusOrReduce'
+import plusOrReduceState from '@/components/common/plusOrReduceState'
 
 export default {
   components: {
     currencyFormatter,
-    plusOrReduce
+    plusOrReduceState
   },
   name: 'account-paremeters',
   data () {
     return {
+      simulatedData: {},
 
       tableData: {
         tHead: [
@@ -105,21 +106,6 @@ export default {
           {
               title: '总仓位',
               lang: 'Position Ratio'
-          }
-        ],
-        tDataList:[
-          {
-            totalAsset: 1465147.48,
-            cumulativeReturn: 465277.78,
-            ROA: 46.57,
-            networthRate: 1.4651,
-            maxDrawdown: {
-              "status": "reduce",
-              "num": 10.65
-            },
-            sharpeRatio: 1.132,
-            successRatio: 71.6,
-            positionRatio: 46.78
           }
         ]
       },
@@ -158,28 +144,29 @@ export default {
               title: '总浮动盈亏',
               lang: 'Floating Return'
           }
-        ],
-        tDataList:[
-          {
-            lastSurplus: {
-              "status": 'plus',
-              "num": 13045.26
-            },
-            positionMargin: 3678955.78,
-            availableFund: 786197.78,
-            frozenFund: 0,
-            fundEfficiency: 46.34,
-            longPosition: 39.98,
-            shortPosition: 13.68,
-            floatingReturn: {
-              "status": 'plus',
-              "num": 234567
-            }
-          }
         ]
       }
 
     }
+  },
+  mounted: function(){
+    var vm = this;
+    var params = {trading_token: 'xx'};
+
+    this.$http({
+      method: 'post',
+      url: '/api/marketSimulated/accountIndex',
+      params: params,
+      headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+    })
+    .then(function (response) {
+      if(response.data.code === 100){
+        vm.simulatedData = response.data.data;
+      }
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
   }
 }
 </script>

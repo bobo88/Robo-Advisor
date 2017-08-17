@@ -11,9 +11,6 @@
         <router-link to="/issue-order/import-instruction">
           <span class="file-btn">导入指令</span>
         </router-link>
-        <!-- <span class="file-btn">导入指令</span> -->
-        <!-- <input id="fileId" type="file" name="file" style="display:none;" />
-  			<label for="fileId"><span class="file-btn">导入指令</span></label> -->
   		</p>
   	</header>
 

@@ -10,6 +10,12 @@ import Vue from 'vue'
  */
 Vue.filter("currencyFormatter", function(value) {
     function formatMoney(s, type) {
+        var pre = '';
+
+        if(/^-/.test(s)){
+            pre = '-';
+            s = s.toString().replace(/^-(\d*)$/, "$1");
+        }
         if (/[^0-9\.]/.test(s))
             return "0";
         if (s == null || s == "")
@@ -27,7 +33,7 @@ Vue.filter("currencyFormatter", function(value) {
                 s = a[0];
             }
         }
-        return s;
+        return pre + s;
     }
 
     return formatMoney(value, 1);
