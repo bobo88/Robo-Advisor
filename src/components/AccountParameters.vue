@@ -155,7 +155,7 @@ export default {
 
     this.$http({
       method: 'post',
-      url: '/api/marketSimulated/accountIndex',
+      url: process.env.BASE_URL + '/marketSimulated/accountIndex',
       params: params,
       headers: {'Content-Type': 'application/x-www-form-urlencoded'},
     })

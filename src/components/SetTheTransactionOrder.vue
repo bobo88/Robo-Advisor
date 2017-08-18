@@ -256,7 +256,7 @@ export default {
 
         this.$http({
           method: 'post',
-          url: '/api/marketOrder/issueOrder',
+          url: process.env.BASE_URL + '/marketOrder/issueOrder',
           params: params,
           headers: {'Content-Type': 'application/x-www-form-urlencoded'},
         })

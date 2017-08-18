@@ -101,7 +101,7 @@ export default {
 
     this.$http({
       method: 'post',
-      url: '/api/marketSimulated/currentPosition',
+      url: process.env.BASE_URL + '/marketSimulated/currentPosition',
       params: params,
       headers: {'Content-Type': 'application/x-www-form-urlencoded'},
     })

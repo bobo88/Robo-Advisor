@@ -42,7 +42,7 @@
           <td colspan="8">暂无数据</td>
         </tr>
       </tbody>
-      
+
     </table>
 
     <pop-up v-if="showPopUpState" @close-tc="closePopUp">
@@ -227,7 +227,7 @@ export default {
       if(!!this.end_date && !!this.h_query_num && !!this.h_start_num && !!this.start_date && !!this.trading_token){
         this.$http({
           method: 'post',
-          url: '/api/marketSimulated/currentTurnoverJournal',
+          url: process.env.BASE_URL + '/marketSimulated/currentTurnoverJournal',
           params: params,
           headers: {'Content-Type': 'application/x-www-form-urlencoded'},
         })
