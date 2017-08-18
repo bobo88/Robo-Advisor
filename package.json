@@ -20,7 +20,8 @@
     "less-loader": "^4.0.5",
     "vue": "^2.3.3",
     "vue-file-upload": "^0.1.2",
-    "vue-router": "^2.6.0"
+    "vue-router": "^2.6.0",
+    "vue-upload-component": "^2.4.0-beta.9"
   },
   "devDependencies": {
     "autoprefixer": "^7.1.2",

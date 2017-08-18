@@ -8,10 +8,20 @@
   	<header class="table-common-head clearfix">
   		<span class="tit fl">导入指令</span>
   		
-  		<input id="fileId" type="file" name="file" style="display:none;" @change="onFileChange" />
-  		<label for="fileId"><span class="file-btn">本地上传</span></label>
+		<vue-file-upload url='upload.do' ref="vueFileUploader" :filters="filters" :events='cbEvents' :request-options="reqopts" :onAdd="onAddItem"></vue-file-upload>
+
+
+
+  		<!-- <input id="fileId" type="file" name="file" style="display:none;" @change="onFileChange" />
+  		<label for="fileId"><span class="file-btn">本地上传</span></label> -->
+  		
   	</header>
 
+		<ul>
+			<li v-for='file in files'>
+				<button @click="uploadItem(file)">上传</button>
+			</li>
+		</ul>
 	
 
 
@@ -19,11 +29,42 @@
 </template>
 
 <script>
+import VueFileUpload from 'vue-file-upload';
+
 export default {
+	components:{
+		VueFileUpload
+	},
   	name: 'import-instruction',
   	data () {
 	    return {
-	      	fileinput: ''
+	      	fileinput: '',
+	      	files:[],
+			//文件过滤器，只能上传图片 
+			filters:[
+			{
+			  name:"imageFilter",
+			  fn(file){
+			      var type = '|' + file.type.slice(file.type.lastIndexOf('/') + 1) + '|';
+			      return '|jpg|png|jpeg|bmp|gif|'.indexOf(type) !== -1;
+			  }
+			}
+			],
+			//回调函数绑定 
+			cbEvents:{
+				onCompleteUpload:(file,response,status,header)=>{
+				  console.log(file);
+				  console.log("finish upload;")
+				}
+			},
+			//xhr请求附带参数 
+			reqopts:{
+				formData:{
+				  tokens:'tttttttttttttt'
+				},
+				responseType:'json',
+				withCredentials:false
+			}
 	    }
   	},
   	methods: {
@@ -80,6 +121,34 @@ export default {
 
 
 			}, 100);
+        },
+
+        onStatus(file){
+          if(file.isSuccess){
+            return "上传成功";
+          }else if(file.isError){
+            return "上传失败";
+          }else if(file.isUploading){
+            return "正在上传";
+          }else{
+            return "待上传";
+          }
+        },
+        onAddItem(files){
+            console.log(files);
+            this.files = files;
+        },
+        uploadItem(file){
+          //单个文件上传 
+          file.upload();
+        },
+        uploadAll(){
+          //上传所有文件 
+          this.$refs.vueFileUploader.uploadAll();
+        },
+        clearAll(){
+          //清空所有文件 
+          this.$refs.vueFileUploader.clearAll();
         }
   	},
   	watch: {
