@@ -41,21 +41,44 @@ export default {
 			}
 			reader.readAsText(file);
 			setTimeout(function(){
-				vm.$http.get('/static/demo.json')
-				// vm.$http.post('/static/demo.json', {
-				// 	fileInput: vm.fileinput
+
+
+				// vm.$http.get('/static/demo.json')
+				// // vm.$http.post('/static/demo.json', {
+				// // 	fileInput: vm.fileinput
+				// // })
+				// .then(function (response) {
+				// 	if (response.data.code == 1) {
+		  //   			vm.$nextTick(function () {
+				// 			// console.log(response.data.msg);
+				// 			alert(response.data.msg);
+		  //   			})
+		  //   		}
 				// })
-				.then(function (response) {
-					if (response.data.code == 1) {
-		    			vm.$nextTick(function () {
-							// console.log(response.data.msg);
-							alert(response.data.msg);
-		    			})
-		    		}
-				})
-				.catch(function (error) {
-					console.log(error);
-				});
+				// .catch(function (error) {
+				// 	console.log(error);
+				// });
+				
+				// @Html.TextBoxFor(m => m.FileName, new { id = "file-upload", type = "file", accept = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
+				
+				// vm.$http({
+				//   method: 'post',
+				//   url: process.env.BASE_URL + '/marketOrder/fileupload',
+				//   params: {file: vm.fileinput},
+				//   headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+				// })
+				// .then(function (response) {
+				//   if(response.data.code === 100){
+				//   	alert(1);
+				//     // vm.simulatedData = response.data.data;
+				//   }
+				// })
+				// .catch(function (error) {
+				//   console.log(error);
+				// });
+
+
+
 			}, 100);
         }
   	},
