@@ -9,51 +9,63 @@
   		<span class="tit fl">导入指令</span>
 
 
-  		<input id="fileId" type="file" name="file" style="display:none;" @change="onFileChange" />
+  		<input id="fileId" type="file" name="file" style="display:none;" @change="onFileChange($event)" />
   		<label for="fileId"><span class="file-btn">本地上传</span></label>
-  		
+
   	</header>
 
+  	<msg :msg="msgCont" v-if="showMsgState" @close-tc="closeMsg"></msg>
   </div>
 </template>
 
 <script>
-import FileUpload from 'vue-upload-component'
+import Msg from '@/components/common/Msg'
 
 export default {
 	components:{
-		FileUpload
+		Msg
 	},
   	name: 'import-instruction',
   	data () {
 	    return {
 	      	fileinput: '',
 	      	files:[],
-	      	postAction: process.env.BASE_URL + '/marketOrder/fileupload'
+	      	simulatedData: {},
+	      	msgCont: '',
+	      	showMsgState: false
 	    }
   	},
   	methods: {
-  		onFileChange(e) {
+  		onFileChange(event) {
+  			var vm = this;
+	        this.file = event.target.files[0];
+	        // console.log(this.file);
+	        // console.log('-----------------------');
 	  		var formData = new FormData();
-	  		console.log(document.getElementById("fileId").files[0]);
-	  		console.log('-----------------------');
-	  		formData.append("file" , document.getElementById("fileId").files[0]);
+	  		formData.append("file" , this.file);
 
-	  		this.$http({
-	  		  method: 'post',
-	  		  url: process.env.BASE_URL + '/marketOrder/fileupload',
-	  		  params: formData,
-	  		  headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-	  		})
-	  		.then(function (response) {
-	  		  if(response.data.code === 100){
-	  		  	alert(1);
-	  		    // vm.simulatedData = response.data.data;
-	  		  }
-	  		})
-	  		.catch(function (error) {
-	  		  console.log(error);
-	  		});
+	        let config = {
+	          headers: {
+	            'Content-Type': 'multipart/form-data'
+	          }
+	        };
+	        this.$http.post(
+	            process.env.BASE_URL + '/marketOrder/fileupload',
+	            formData, config
+	        ).then(function (res) {
+	          if(res.data.code === 100){
+	            alert(1);
+	            // vm.simulatedData = res.data.data;
+	          }else{
+	          	vm.msgCont = res.data.message;
+	          	vm.showMsgState = true;
+	          }
+	        }).catch(function (error) {
+	          console.log(error);
+	        });
+	    },
+	    closeMsg(){
+	      this.showMsgState = false;
 	    }
   	},
   	watch: {
