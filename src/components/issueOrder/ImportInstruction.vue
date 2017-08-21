@@ -7,22 +7,12 @@
   <div class="import-instruction">
   	<header class="table-common-head clearfix">
   		<span class="tit fl">导入指令</span>
-  		
-		<file-upload v-model="files" post-action="/post.method" put-action="/put.method">Upload file</file-upload>
 
 
-  		<!-- <input id="fileId" type="file" name="file" style="display:none;" @change="onFileChange" />
-  		<label for="fileId"><span class="file-btn">本地上传</span></label> -->
+  		<input id="fileId" type="file" name="file" style="display:none;" @change="onFileChange" />
+  		<label for="fileId"><span class="file-btn">本地上传</span></label>
   		
   	</header>
-
-		<ul>
-			<li v-for='file in files'>
-				<button @click="uploadItem(file)">上传</button>
-			</li>
-		</ul>
-	
-
 
   </div>
 </template>
@@ -38,64 +28,33 @@ export default {
   	data () {
 	    return {
 	      	fileinput: '',
-	      	files:[]
+	      	files:[],
+	      	postAction: process.env.BASE_URL + '/marketOrder/fileupload'
 	    }
   	},
   	methods: {
   		onFileChange(e) {
-  		// var formData = new FormData(this.el);
-	      var files = e.target.files || e.dataTransfer.files;
-	      if (!files.length) return;
-	      this.createInput(files[0]);
-	    },
-	    createInput(file) {
-			var reader = new FileReader();
-			var vm = this;
-			reader.onload = (e) => {
-				vm.fileinput = reader.result;
-			}
-			reader.readAsText(file);
-			setTimeout(function(){
+	  		var formData = new FormData();
+	  		console.log(document.getElementById("fileId").files[0]);
+	  		console.log('-----------------------');
+	  		formData.append("file" , document.getElementById("fileId").files[0]);
 
-
-				// vm.$http.get('/static/demo.json')
-				// // vm.$http.post('/static/demo.json', {
-				// // 	fileInput: vm.fileinput
-				// // })
-				// .then(function (response) {
-				// 	if (response.data.code == 1) {
-		  //   			vm.$nextTick(function () {
-				// 			// console.log(response.data.msg);
-				// 			alert(response.data.msg);
-		  //   			})
-		  //   		}
-				// })
-				// .catch(function (error) {
-				// 	console.log(error);
-				// });
-				
-				// @Html.TextBoxFor(m => m.FileName, new { id = "file-upload", type = "file", accept = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
-				
-				// vm.$http({
-				//   method: 'post',
-				//   url: process.env.BASE_URL + '/marketOrder/fileupload',
-				//   params: {file: vm.fileinput},
-				//   headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-				// })
-				// .then(function (response) {
-				//   if(response.data.code === 100){
-				//   	alert(1);
-				//     // vm.simulatedData = response.data.data;
-				//   }
-				// })
-				// .catch(function (error) {
-				//   console.log(error);
-				// });
-
-
-
-			}, 100);
-        }
+	  		this.$http({
+	  		  method: 'post',
+	  		  url: process.env.BASE_URL + '/marketOrder/fileupload',
+	  		  params: formData,
+	  		  headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+	  		})
+	  		.then(function (response) {
+	  		  if(response.data.code === 100){
+	  		  	alert(1);
+	  		    // vm.simulatedData = response.data.data;
+	  		  }
+	  		})
+	  		.catch(function (error) {
+	  		  console.log(error);
+	  		});
+	    }
   	},
   	watch: {
   		fileinput (){
