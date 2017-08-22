@@ -8,9 +8,9 @@
   	<header class="table-common-head clearfix">
   		<span class="tit fl">账户持仓 <br/> Current Position</span>
   		<p class="head-summary fr" v-if="headSummary">
-  			<span>账户总资产：5678010.75</span>
+  			<span>账户总资产：5,678,010.75</span>
   			<span>收益率：<em class="f-red">+23.45%</em></span>
-  			<span>累计盈亏：<em class="f-red">+6780.25</em></span>
+  			<span>累计盈亏：<em class="f-red">+6,780.25</em></span>
   			<span>仓位：46.34%</span>
   		</p>
   	</header>
@@ -33,7 +33,6 @@
           <td>{{ item.currentPrice | currencyFormatter }}</td>
           <td>{{ item.averageCost | currencyFormatter }}</td>
           <td><plus-or-reduce-state :obj="item.floatingReturn"></plus-or-reduce-state></td>
-          <td>{{ item.markDay }}</td>
         </tr>
       </tbody>
     </table>
@@ -85,10 +84,6 @@ export default {
           {
               title: '浮动盈亏',
               lang: 'Floating Return'
-          },
-          {
-              title: '交易日',
-              lang: 'Mark Day'
           }
         ]
       }

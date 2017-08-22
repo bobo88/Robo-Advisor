@@ -1,25 +1,57 @@
 <template>
   <div id="app">
-    <left></left>
-    <top></top>
-    
-    <div class="main">
-      <router-view></router-view>
-    </div>
+    <router-view></router-view>
   </div>
 </template>
 
 <script>
-import Left from '@/components/common/Left'
-import Top from '@/components/common/Top'
-import '@/fonts/iconfont.css'    // 使用 iconfont图标库
-
 export default {
-  components: {
-    Left,
-    Top
+  name: 'app',
+  data(){
+    return {
+      isLogin: false,
+      userInfo: { //保存用户信息
+        nick: null,
+        ulevel: null,
+        uid: null,
+        portrait: null
+      }
+    }
   },
-  name: 'app'
+  mounted(){
+    //组件开始挂载时获取用户信息
+    this.getUserInfo();
+  },
+  methods: {
+    //请求用户的一些信息
+    getUserInfo(){
+      this.userInfo = {
+        nick: 'admin',
+        ulevel: 20,
+        uid: '10000',
+        portrait: 'assets/default_user.jpg'
+      };
+
+      //提交mutation到Store
+      this.$store.commit('updateUserInfo', this.userInfo); 
+
+      // //获取信息请求
+      // this.$http.get('static/demo.json', {
+      //   //参数
+      //   "params": this.userInfo
+      //   }).then((response) => {
+      //     //Success
+      //     if(response.data.code == 1){
+            // console.log(this);
+            // console.log(this.$store);
+      //       console.log('---------------------------');
+           // this.$store.commit('updateUserInfo', this.userInfo); 
+      //     }
+      //   }, (response) => {
+      //   //Error
+      // });
+    }
+  }
 }
 </script>
 
@@ -109,6 +141,4 @@ strong{ font-weight: normal;}
   .ivu-date-picker{ color: #333;}
   .ivu-tooltip-inner{ max-width: 400px;}
 }
-.main{ padding: 110px 50px 20px 310px; min-width: 100%; min-height: 100%;}
-
 </style>

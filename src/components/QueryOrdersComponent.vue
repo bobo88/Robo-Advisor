@@ -12,10 +12,10 @@
             <span class="mr10">至(To)</span>
             <Date-picker type="date" placeholder="选择日期" style="width: 140px" placement="bottom-end" class="mr10"></Date-picker>
 
-            <Select v-model="chooseContract" style="width:140px" class="mr10">
+            <Select v-model="chooseContract" style="width:160px" class="mr10">
                 <Option v-for="item in chooseContractList" :value="item.value" :key="item.value">{{ item.label }}</Option>
             </Select>
-            <Select v-model="operatingStatus" style="width:140px" class="mr10">
+            <Select v-model="operatingStatus" style="width:180px" class="mr10">
                 <Option v-for="item in operatingStatusList" :value="item.value" :key="item.value">{{ item.label }}</Option>
             </Select>
 
@@ -89,31 +89,43 @@ export default {
         chooseContract: '',
         chooseContractList: [
             {
-                value: '选择合约1',
-                label: '选择合约1'
+                value: '选择合约 all spots',
+                label: '选择合约 all spots'
             },
             {
-                value: '选择合约2',
-                label: '选择合约2'
+                value: '黄金延期Au(T+D)',
+                label: '黄金延期Au(T+D)'
             },
             {
-                value: '选择合约3',
-                label: '选择合约3'
+                value: '迷你黄金延期mAu(T+D)',
+                label: '迷你黄金延期mAu(T+D)'
+            },
+            {
+                value: '白银延期Ag(T+D)',
+                label: '白银延期Ag(T+D)'
             }
         ],
         operatingStatus: '',
         operatingStatusList: [
             {
-                value: '运行状态1',
-                label: '运行状态1'
+                value: '选择运行状态 all run_status',
+                label: '选择运行状态 all run_status'
             },
             {
-                value: '运行状态2',
-                label: '运行状态2'
+                value: '中断 suspended',
+                label: '中断 suspended'
             },
             {
-                value: '运行状态3',
-                label: '运行状态3'
+                value: '运行中 running',
+                label: '运行中 running'
+            },
+            {
+                value: '已触发 triggered',
+                label: '已触发 triggered'
+            },
+            {
+                value: '已成交 trade succeeded',
+                label: '已成交 trade succeeded'
             }
         ],
 

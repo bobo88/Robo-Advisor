@@ -37,7 +37,7 @@
       <tbody>
 
         <tr>
-          <td class="left-tit">2.设置交易信号<span class="error" v-if="!(!!tradeSignalType && !!tradeSignalCond && !!tradeSignalValue)">*必填项</span></td>
+          <td class="left-tit">2.设置交易信号<!-- <span class="error" v-if="!(!!tradeSignalType && !!tradeSignalCond && !!tradeSignalValue)">*必填项</span> --></td>
           <td>
             <span class="mr10">当</span>
             <Select v-model="tradeSignalType" style="width:86px" class="mr10">
@@ -158,18 +158,6 @@ export default {
         {
             value: '1',
             label: '最新价'
-        },
-        {
-            value: '2',
-            label: '成交量'
-        },
-        {
-            value: '3',
-            label: '成交额'
-        },
-        {
-            value: '4',
-            label: '均线'
         }
       ],
 
@@ -240,7 +228,7 @@ export default {
     },
     submitTransactionOrder(){
       var vm = this;
-      if(!!this.bs && !!this.entrAmount && !!this.entrPrice && !!this.offsetFlag && !!this.orderDeadlineFarmatter && !!this.prodCode && !!this.tradeSignalCond && !!this.tradeSignalType && !!this.tradeSignalValue ){
+      if(!!this.bs && !!this.entrAmount && !!this.entrPrice && !!this.offsetFlag && !!this.orderDeadlineFarmatter && !!this.prodCode){
 
         var params = {
           bs: this.bs,
@@ -249,9 +237,9 @@ export default {
           offsetFlag: parseFloat(this.offsetFlag),
           orderDeadline: this.orderDeadlineFarmatter,
           prodCode: this.prodCode,
-          tradeSignalCond: parseFloat(this.tradeSignalCond),
-          tradeSignalType: parseFloat(this.tradeSignalType),
-          tradeSignalValue: parseFloat(this.tradeSignalValue)
+          tradeSignalCond: this.tradeSignalCond ? parseFloat(this.tradeSignalCond) : 0,
+          tradeSignalType: this.tradeSignalType ? parseFloat(this.tradeSignalType) : 0,
+          tradeSignalValue: this.tradeSignalValue ? parseFloat(this.tradeSignalValue) : 0
         };
 
         this.$http({
