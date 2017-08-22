@@ -10,10 +10,10 @@
 
     <form action="#" method="post" autofocus autocomplete="off">
       <p class="item-form">
-        <Input placeholder="账号" v-model="account" style="width: 330px; height: 50px;"></Input>
+        <Input placeholder="账号" v-model="account" style="width: 330px; height: 50px;" @keyup.native.enter="login"></Input>
       </p>
       <p class="item-form">
-        <Input type="password" placeholder="密码" v-model="password" style="width: 330px; height: 50px;"></Input>
+        <Input type="password" placeholder="密码" v-model="password" style="width: 330px; height: 50px;" @keyup.native.enter="login"></Input>
       </p>
       <!-- <p class="item-form">
         <Input placeholder="验证码" style="width: 200px; height: 50px;"></Input>
@@ -21,27 +21,21 @@
       <p class="item-form">
         <Button type="ghost" class="login-btn" @click="login">登录</Button>
       </p>
+      <p class="error-msg">{{ msgCont }}</p>
     </form>
-    <msg :msg="msgCont" v-if="showMsgState" @close-tc="closeMsg"></msg>
+    
   </div>
 </template>
 
 <script>
-import Msg from '@/components/common/Msg'
-
 export default {
-  components:{
-    Msg
-  },
   name: 'login-component',
   data () {
     return {
       isLoging: false,
       account: '',
       password: '',
-
-      msgCont: '',
-      showMsgState: false
+      msgCont: ''
     }
   },
   mounted: function(){
@@ -54,9 +48,11 @@ export default {
     login(){
       var vm = this;
       if(this.account!='' && this.password!=''){
-        if( this.account != 'admin' && this.password != '123456'){
+        if( this.account != 'admin' || this.password != '123456'){
           vm.msgCont = '账号或密码错误';
-          vm.showMsgState = true;
+          setTimeout(function(){
+            vm.msgCont = '';
+          }, 2000);
         }else{
           this.toLogin();
         }
@@ -95,9 +91,6 @@ export default {
           //登录成功后
           this.$router.push('/main');
         },500)
-    },
-    closeMsg(){
-      this.showMsgState = false;
     }
   }
 }
@@ -109,6 +102,7 @@ export default {
     .logo{ position: absolute; z-index: 2; top: -70px; left: 165px; width: 140px; height: 140px; background:#000; border-radius: 50%; overflow: hidden;
       img{ position: absolute; z-index: 3; left: 50%; transform: translate(-50%);}
     }
+    .error-msg{ padding: 5px 0; line-height:20px; color: #f00; font-size: 14px; text-align: center;}
     .item-form{ padding: 0 70px; font-size: 14px;
       input.ivu-input{ height: 40px;}
       .login-btn{ margin-top: 20px; width: 330px; height: 40px; border-radius: 20px; color: #fff; background-image: linear-gradient(90deg, #6F64FF 0%, #B93BFB 100%);}
