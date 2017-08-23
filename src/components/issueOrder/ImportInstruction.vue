@@ -26,7 +26,7 @@
 	  	    </tr>
 	  	  </thead>
 	  	  <tbody>
-	  	    <tr v-for="item in simulatedData">
+	  	    <tr v-for="(item,index) in simulatedData">
 	  	      <td>{{ item.prodCode }}</td>
 	  	      <td>{{ item.prodCode === 'AuTD' ? '黄金延期' : (item.prodCode === 'mAuTD' ? '迷你黄金延期' : '白银延期') }}</td>
 	  	      <td>{{ item.tradeSignalCond !== 0 ? ((item.tradeSignalCond == 1) ? '&gt;=' : '&lt;=') : '' }}</td>
@@ -35,7 +35,7 @@
 	  	      <td>{{ item.entrAmount }}</td>
 	  	      <td>{{ item.orderDeadline }}</td>
 
-	  	      <td><a href="javascript:;">修改</a></td>
+	  	      <td><a href="javascript:;" @click="editing(index)">修改</a></td>
 
 	  	    </tr>
 	  	  </tbody>
@@ -43,26 +43,92 @@
 
 
 	</section>
-
+	
+	<!-- 提示信息 -->
   	<msg :msg="msgCont" v-if="showMsgState" @close-tc="closeMsg"></msg>
+
+	<!-- 修改导入指令 -->
+  	<pop-up v-if="showPopUpState" @close-tc="closePopUp">
+  	  <div slot="content">
+  	    <table cellpadding="0" cellspacing="0">
+  	      <thead>
+  	        <tr>
+  	          <th v-for="item of editingData.tHead">{{ item.title }}<br/> {{ item.lang }}</th>
+  	        </tr>
+  	      </thead>
+  	      <tbody>
+  	        <tr>
+  	          <td>
+	  	          <Select v-model="itemImportPopUpData.prodCode" style="width:80px">
+	  	              <Option value="AuTD" key="0">AuTD</Option>
+	  	              <Option value="mAuTD" key="1">mAuTD</Option>
+	  	              <Option value="AgTD" key="2">AgTD</Option>
+	  	          </Select>
+  	          </td>
+  	          <td>{{ itemImportPopUpData.prodCode === 'AuTD' ? '黄金延期' : (itemImportPopUpData.prodCode === 'mAuTD' ? '迷你黄金延期' : '白银延期') }}</td>
+  	          <td>
+	  	          <Select v-model="itemImportPopUpData.tradeSignalCond" style="width:80px">
+	  	              <Option value="1" key="0">大于等于</Option>
+	  	              <Option value="2" key="1">小于等于</Option>
+	  	          </Select>
+  	          </td>
+  	          <td>
+	  	          <Select v-model="itemImportPopUpData.offsetFlag" style="width:80px">
+	  	              <Option value="0" key="0">开仓</Option>
+	  	              <Option value="1" key="1">平仓</Option>
+	  	          </Select>
+  	          </td>
+  	          <td><input type="text" v-model="itemImportPopUpData.entrPrice" style="width:80px"></td>
+  	          <td><input type="text" v-model="itemImportPopUpData.entrAmount" style="width:80px"></td>
+  	          <td>
+  	         	 <!-- <Date-picker type="datetime" v-model="itemImportPopUpData.orderDeadline" format="yyyy-MM-dd HH:mm" placeholder="选择日期和时间（不含秒）" style="width: 100px"></Date-picker> -->
+  	         	 <Time-picker format="HH:mm" v-model="itemImportPopUpDataOrderDeadline"  placeholder="选择时间" style="width: 140px" placement="top"></Time-picker>
+  	         	 <span>-- {{ itemImportPopUpDataOrderDeadline }} --</span>
+  	          </td>
+  	        </tr>
+  	      </tbody>
+  	    </table>
+  	  </div>
+  	</pop-up>
+
+
   </div>
 </template>
 
 <script>
 import Msg from '@/components/common/Msg'
+//引入弹窗组件
+import PopUp from '@/components/common/PopUp'
+
+function timeFormatter(s){
+	var _str = [];
+	if(s !== '') {
+	  //小时HH
+	  s.getHours() > 9 ? _str[0] = s.getHours() : _str[0] = '0' + s.getHours();
+	  //分钟mm
+	  s.getMinutes() > 9 ? _str[1] = s.getMinutes() : _str[1] = '0' + s.getMinutes();
+	  
+	  return _str.join(':');
+	}
+}
 
 export default {
 	components:{
-		Msg
+		Msg,
+		PopUp
 	},
   	name: 'import-instruction',
   	data () {
 	    return {
+	    	showPopUpState: false,
 	      	fileinput: '',
 	      	files:[],
 	      	simulatedData: {},
 	      	msgCont: '',
 	      	showMsgState: false,
+	      	itemImportPopUpData: null,
+	      	orderDeadline: '',
+	      	currentEditIndex: 0,
 
 	      	tableData: {
 	      	    tHead: [
@@ -97,6 +163,38 @@ export default {
 	      	      {
 	      	          title: '操作',
 	      	          lang: 'Oprate'
+	      	      }
+	      	    ]
+	      	},
+	      	editingData: {
+	      	    tHead: [
+	      	      {
+	      	          title: '合约代码',
+	      	          lang: 'Prod Code'
+	      	      },
+	      	      {
+	      	          title: '合约',
+	      	          lang: 'Spot Name'
+	      	      },
+	      	      {
+	      	          title: '交易信号',
+	      	          lang: 'Trade Signal'
+	      	      },
+	      	      {
+	      	          title: '操作',
+	      	          lang: 'Offset Flag'
+	      	      },
+	      	      {
+	      	          title: '交易价格',
+	      	          lang: 'Order Price'
+	      	      },
+	      	      {
+	      	          title: '交易数量',
+	      	          lang: 'Order Amount'
+	      	      },
+	      	      {
+	      	          title: '指令截止时间',
+	      	          lang: 'Deadline'
 	      	      }
 	      	    ]
 	      	}
@@ -139,12 +237,33 @@ export default {
 	    },
 	    closeMsg(){
 	      this.showMsgState = false;
+	    },
+	    editing(index){
+	    	this.showPopUpState = true;
+	    	this.currentEditIndex = index;
+	    	this.itemImportPopUpData = this.simulatedData[index];
+	    },
+	    closePopUp(){
+	      this.showPopUpState = false;
 	    }
   	},
   	watch: {
   		fileinput (){
   			console.log(this.fileinput);
+  		},
+  		itemImportPopUpData(){
+  			console.log('change');
   		}
+  	},
+  	computed: {
+ 		itemImportPopUpDataOrderDeadline: {
+ 			get: function(){
+		      	return this.simulatedData[this.currentEditIndex].orderDeadline;
+		    },
+ 			set: function(newValue){
+		      	return this.simulatedData[this.currentEditIndex].orderDeadline = timeFormatter(newValue);
+		    }
+ 		}
   	}
 }
 </script>
