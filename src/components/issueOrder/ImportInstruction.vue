@@ -81,9 +81,7 @@
   	          <td><input type="text" v-model="itemImportPopUpData.entrPrice" style="width:80px"></td>
   	          <td><input type="text" v-model="itemImportPopUpData.entrAmount" style="width:80px"></td>
   	          <td>
-  	         	 <!-- <Date-picker type="datetime" v-model="itemImportPopUpData.orderDeadline" format="yyyy-MM-dd HH:mm" placeholder="选择日期和时间（不含秒）" style="width: 100px"></Date-picker> -->
   	         	 <Time-picker format="HH:mm" v-model="itemImportPopUpDataOrderDeadline"  placeholder="选择时间" style="width: 140px" placement="top"></Time-picker>
-  	         	 <span>-- {{ itemImportPopUpDataOrderDeadline }} --</span>
   	          </td>
   	        </tr>
   	      </tbody>
