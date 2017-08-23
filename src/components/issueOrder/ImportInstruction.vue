@@ -40,8 +40,11 @@
 	  	    </tr>
 	  	  </tbody>
 	  	</table>
-
-
+		
+		<div class="btn-wrap">
+			<Button type="primary" @click="cancelInstruction">取消</Button>
+			<Button type="primary" @click="definiteInstruction">确定下发指令</Button>
+		</div>
 	</section>
 	
 	<!-- 提示信息 -->
@@ -119,7 +122,6 @@ export default {
   	data () {
 	    return {
 	    	showPopUpState: false,
-	      	fileinput: '',
 	      	files:[],
 	      	simulatedData: {},
 	      	msgCont: '',
@@ -243,12 +245,47 @@ export default {
 	    },
 	    closePopUp(){
 	      this.showPopUpState = false;
+	    },
+	    //取消指令
+	    cancelInstruction(){
+	    	//解决inputfile选取相同文件后，change事件不起作用的方法
+	    	var obj = document.getElementById('fileId'); 
+	    	obj.value=''; 
+
+	    	this.simulatedData = [];
+	    },
+	    //确定下发指令
+	    definiteInstruction(){
+	    	var vm = this;
+	    	var params = {
+	    	  batchOrder: JSON.stringify(this.simulatedData)
+	    	};
+
+	    	  // batchOrder: JSON.stringify(this.simulatedData)
+			this.$http({
+				method: 'post',
+				url: process.env.BASE_URL + '/marketOrder/batchSubmit',
+				params: params,
+				headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+			})
+			.then(function (response) {
+				if(response.data.code === 100){
+					vm.msgCont = '导入指令成功';
+					vm.showMsgState = true;
+
+					// var obj = document.getElementById('fileId'); 
+					// obj.value=''; 
+
+					// vm.simulatedData = [];
+				}
+			})
+			.catch(function (error) {
+				console.log(error);
+			});
+
 	    }
   	},
   	watch: {
-  		fileinput (){
-  			console.log(this.fileinput);
-  		},
   		itemImportPopUpData(){
   			console.log('change');
   		}
@@ -276,6 +313,9 @@ export default {
 
 		.instruction-ed{ padding: 10px;
 
+		}
+		.btn-wrap{ padding: 10px; text-align: right;
+			button{ margin-left: 10px;}
 		}
 	}
 </style>
