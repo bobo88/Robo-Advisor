@@ -76,9 +76,12 @@ export default {
         })
         .then(function (response) {
           if(response.data.code === 100){
-            let expireDays = 1000 * 60 * 60 * 24 * 15;
-            vm.setCookie('session', response.data.data.trading_token, expireDays);
+            // let expireDays = 1000 * 60 * 60 * 24 * 15;
+            // vm.setCookie('session', response.data.data.trading_token, expireDays);
+            sessionStorage.setItem('trading_token', response.data.data.trading_token);
+            // sessionStorage.setItem('username', response.data.data.cust_name);
             vm.$store.commit('SETTOKEN', response.data.data.trading_token);
+            // vm.$store.commit('SETUSERNAME', response.data.data.cust_name);
 
             //登录成功后
             vm.$router.push('/main'); 

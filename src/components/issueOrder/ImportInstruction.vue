@@ -213,7 +213,10 @@ export default {
 		        let config = {
 		          headers: {
 		            'Content-Type': 'multipart/form-data'
-		          }
+		          },
+		          params: {
+      	    			trading_token: vm.$store.state.trading_token
+      	    		}
 		        };
 		        this.$http.post(
 		            process.env.BASE_URL + '/marketOrder/fileupload',
@@ -258,7 +261,8 @@ export default {
 	    definiteInstruction(){
 	    	var vm = this;
 	    	var params = {
-	    	  batchOrder: JSON.stringify(this.simulatedData)
+	    		trading_token: vm.$store.state.trading_token, //交易token
+	    	  	batchOrder: JSON.stringify(this.simulatedData)
 	    	};
 
 	    	  // batchOrder: JSON.stringify(this.simulatedData)

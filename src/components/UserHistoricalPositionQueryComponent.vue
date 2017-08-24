@@ -156,7 +156,7 @@ export default {
         h_query_num: this.h_query_num, //每页记录数
         h_start_num: this.h_start_num, //当前第几页
         start_date: this.startDateFarmatter, //开始日期
-        trading_token: this.trading_token, //交易token
+        trading_token: vm.$store.state.trading_token, //交易token
       };
 
       if(!!this.end_date && !!this.h_query_num && !!this.h_start_num && !!this.start_date && !!this.trading_token){

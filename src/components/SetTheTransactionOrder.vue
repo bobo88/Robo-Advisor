@@ -237,6 +237,7 @@ export default {
           offsetFlag: parseFloat(this.offsetFlag),
           orderDeadline: this.orderDeadlineFarmatter,
           prodCode: this.prodCode,
+          trading_token: vm.$store.state.trading_token, //交易token
           tradeSignalCond: this.tradeSignalCond ? parseFloat(this.tradeSignalCond) : 0,
           tradeSignalType: this.tradeSignalType ? parseFloat(this.tradeSignalType) : 0,
           tradeSignalValue: this.tradeSignalValue ? parseFloat(this.tradeSignalValue) : 0

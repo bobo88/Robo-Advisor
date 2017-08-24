@@ -92,7 +92,7 @@ export default {
   },
   mounted: function(){
     var vm = this;
-    var params = {trading_token: 'xx'};
+    var params = {trading_token: vm.$store.state.trading_token};
 
     this.$http({
       method: 'post',

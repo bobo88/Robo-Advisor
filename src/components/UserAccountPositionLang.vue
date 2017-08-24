@@ -27,7 +27,7 @@
       <tbody>
         <tr v-for="item in simulatedData">
           <td>{{ item.spotName }}</td>
-          <td>{{ item.positionType == '1' ? '多' : '空' }}</td>
+          <td>{{ item.positionType }}</td>
           <td>{{ item.positionAmount }}</td>
           <td>{{ item.availableAmount }}</td>
           <td>{{ item.currentPrice | currencyFormatter }}</td>
@@ -92,7 +92,7 @@ export default {
   },
   mounted: function(){
     var vm = this;
-    var params = {trading_token: 'xx'};
+    var params = {trading_token: vm.$store.state.trading_token};
 
     this.$http({
       method: 'post',
@@ -102,7 +102,7 @@ export default {
     })
     .then(function (response) {
       if(response.data.code === 100){
-        vm.simulatedData = response.data.data;
+        vm.simulatedData = response.data.data.list_defer_posi_info;
       }
     })
     .catch(function (error) {

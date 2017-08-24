@@ -30,7 +30,8 @@ const store = new Vuex.Store({
         Ag: 0,
         mAu: 0
     },
-    trading_token: sessionStorage.getItem('trading_token')
+    trading_token: sessionStorage.getItem('trading_token'),
+    username: sessionStorage.getItem('username')
 	},
 	mutations: {
 		ModifiedStateAu: function (state) {
@@ -38,6 +39,9 @@ const store = new Vuex.Store({
     },
     SETTOKEN: function (state, trading_token) {
       state.trading_token = trading_token
+    },
+    SETUSERNAME: function (state, username) {
+      state.username = username
     }
 	}
 });
@@ -86,9 +90,8 @@ new Vue({
   },
   methods: {
   	checkLogin(){
-  	  //检查是否存在session
-  	  //cookie操作方法在源码里有或者参考网上的即可
-  	  if(!this.getCookie('session')){
+  	  //检查是否存在trading_token
+  	  if(!sessionStorage.getItem('trading_token')){
   	    //如果没有登录状态则跳转到登录页
   	    this.$router.push('/login');
   	  }

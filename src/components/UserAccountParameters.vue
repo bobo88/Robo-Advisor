@@ -22,7 +22,7 @@
         <tr>
           <td>{{ simulatedData.totalAsset | currencyFormatter }}</td>
           <td><plus-or-reduce-state :obj="simulatedData.cumulativeReturn"></plus-or-reduce-state></td>
-          <td>{{ simulatedData.roa }}%</td>
+          <td>{{ simulatedData.ROA }}%</td>
           <td>{{ simulatedData.netWorthRate }}</td>
           <td><plus-or-reduce-state :obj="simulatedData.maxDrawdown" :percentage="true"></plus-or-reduce-state></td>
           <td>{{ simulatedData.sharpeRatio }}</td>
@@ -151,7 +151,7 @@ export default {
   },
   mounted: function(){
     var vm = this;
-    var params = {trading_token: 'xx'};
+    var params = {trading_token: vm.$store.state.trading_token};
 
     this.$http({
       method: 'post',
