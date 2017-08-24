@@ -12,16 +12,14 @@
             <Option v-for="item in chooseContractList" :value="item.value" :key="item.value">{{ item.label }}</Option>
         </Select>
 
-        <Date-picker type="date" placeholder="选择日期" style="width: 140px" placement="bottom-end" class="mr10"></Date-picker>
-        <span class="mr10">至(To)</span>
-        <Date-picker type="date" placeholder="选择日期" style="width: 140px" placement="bottom-end" class="mr10"></Date-picker>
+        <Date-picker type="date" placeholder="选择日期" style="width: 140px" placement="bottom-end" class="mr10" @on-change="setBeginDate"></Date-picker>
 
         <Select v-model="operatingStatus" style="width:140px" class="mr10">
             <Option v-for="item in operatingStatusList" :value="item.value" :key="item.value">{{ item.label }}</Option>
         </Select>
         
-        <Button type="info" shape="circle" style="width: 70px" class="mr10">查询</Button>
-        <Button type="ghost" shape="circle">导出(Export)</Button>
+        <Button type="info" shape="circle" style="width: 70px" class="mr10" @click="getklineData">查询</Button>
+       <!--  <Button type="ghost" shape="circle">导出(Export)</Button> -->
   		</div>
   	</header>
 
@@ -35,21 +33,21 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="item in tableData.tDataList">
-          <td>{{ item.InstID }}</td>
-          <td>{{ item.QuoteTime }}</td>
-          <td>{{ item.Open | currencyFormatter }}</td>
-          <td>{{ item.High | currencyFormatter }}</td>
-          <td>{{ item.Low | currencyFormatter }}</td>
-          <td>{{ item.Close | currencyFormatter }}</td>
-          <td><plus-or-reduce :obj="item.UpDown"></plus-or-reduce></td>
-          <td><plus-or-reduce :obj="item.UpDownRate" :percentage="true"></plus-or-reduce></td>
-          <td>{{ item.Average | currencyFormatter }}</td>
-          <td>{{ item.Volume }}</td>
-          <td>{{ item.RMBTurnOver }}</td>
+        <tr v-for="item in pageDataList">
+          <td>{{ chooseContract }}</td>
+          <td>{{ item.time }}</td>
+          <td>{{ item.high | currencyFormatter }}</td>
+          <td>{{ item.low | currencyFormatter }}</td>
+          <td>{{ item.close | currencyFormatter }}</td>
+          <td>{{item.updown | tofixed}}</td>
+          <td :class="plusOrReduce(item.updown)">{{item.updownRate | percentRate}}</td>
+          <td :class="plusOrReduce(item.updown)">{{ item.average | currencyFormatter }}</td>
+          <td>{{ item.volume }}</td>
+          <td>{{ item.turnOver }}</td>
         </tr>
       </tbody>
     </table>
+    <Page :total="tableData.tDataList.length" @on-change="Pagechange" :page-size="pagesize"></Page>
   </div>
 </template>
 
@@ -66,35 +64,57 @@ export default {
   name: 'historical-data-component',
   data () {
     return {
-      chooseContract: '',
+      time: 'day',
+      begin_day: '20160412',
+      chooseContract: 'Au(T+D)',
       chooseContractList: [
           {
-              value: '选择合约1',
-              label: '选择合约1'
+              value: 'Au(T+D)',
+              label: '黄金延期'
           },
           {
-              value: '选择合约2',
-              label: '选择合约2'
+              value: 'Ag(T+D)',
+              label: '白银延期'
           },
           {
-              value: '选择合约3',
-              label: '选择合约3'
+              value: 'mAu(T+D)',
+              label: '迷你黄金延期'
           }
       ],
       operatingStatus: '',
       operatingStatusList: [
           {
-              value: '运行状态1',
-              label: '运行状态1'
+              value: 'day',
+              label: '日K'
           },
           {
-              value: '运行状态2',
-              label: '运行状态2'
+              value: 'week',
+              label: '周K'
           },
           {
-              value: '运行状态3',
-              label: '运行状态3'
-          }
+              value: 'month',
+              label: '月K'
+          },
+          {
+              value: '1',
+              label: '1分钟'
+          },
+          {
+              value: '5',
+              label: '5分钟'
+          },
+          {
+              value: '30',
+              label: '30分钟'
+          },
+          {
+              value: '60',
+              label: '60分钟'
+          },
+          {
+              value: '240',
+              label: '240分钟'
+          }          
       ],
       tableData: {
         tHead: [
@@ -105,10 +125,6 @@ export default {
           {
               title: '时间',
               lang: 'Quote Time'
-          },
-          {
-              title: '开盘价',
-              lang: 'Open'
           },
           {
               title: '最高价',
@@ -144,85 +160,71 @@ export default {
           }
         ],
         tDataList:[
-            {
-                InstID: '黄金延期Au(T+D)',
-                QuoteTime: '15:30',
-                Open: 268.68,
-                High: 282.34,
-                Low: 258.66,
-                Close: 270.99,
-                UpDown: {
-                  "status": 'plus',
-                  "num": 0.09
-                },
-                UpDownRate: {
-                    "status": 'plus',
-                    "num": 0.03
-                },
-                Average: 270.07,
-                Volume: 1134,
-                RMBTurnOver: 105441
-            },
-            {
-                InstID: '白银延期Au(T+D)',
-                QuoteTime: '15:30',
-                Open: 268.68,
-                High: 282.34,
-                Low: 258.66,
-                Close: 270.99,
-                UpDown: {
-                  "status": 'reduce',
-                  "num": 0.03
-                },
-                UpDownRate: {
-                    "status": 'reduce',
-                    "num": 0.06
-                },
-                Average: 270.07,
-                Volume: 1134,
-                RMBTurnOver: 105441
-            },
-            {
-                InstID: '迷你黄金延期Au(T+D)',
-                QuoteTime: '15:30',
-                Open: 268.68,
-                High: 282.34,
-                Low: 258.66,
-                Close: 270.99,
-                UpDown: {
-                  "status": 'plus',
-                  "num": 0.09
-                },
-                UpDownRate: {
-                    "status": 'plus',
-                    "num": 0.03
-                },
-                Average: 270.07,
-                Volume: 1134,
-                RMBTurnOver: 465637
-            },
-            {
-                InstID: '黄金延期Au(T+D)',
-                QuoteTime: '15:30',
-                Open: 268.68,
-                High: 544.34,
-                Low: 433.66,
-                Close: 344.99,
-                UpDown: {
-                  "status": 'reduce',
-                  "num": 0.09
-                },
-                UpDownRate: {
-                    "status": 'reduce',
-                    "num": 0.03
-                },
-                Average: 270.07,
-                Volume: 1134,
-                RMBTurnOver: 566344
-            }
+            
         ]
-      }
+      },
+      pageDataList: [],
+      currentPage: 1,
+      pagesize: 20
+    }
+  },
+  mounted: function () {
+    this.getklineData()
+  },
+  methods: {
+    getklineData: function () {
+      var vm = this;
+      var params = {inst_id: encodeURIComponent(vm.chooseContract),time: vm.time,trading_token: 'lpUkD6mW7mAQ5Q0MFDr1Xbq7m6XD7LzuJuJMbs0LYIknNf4Gh8t9pzfZStie6N2nGAI9iew5f/zIqKe7barv0dLSoqbggtcLUgYjF+kG85lyElb9vfZ7TzXQebSOYuibNWRXiJGvs9mtzffC/oMC5rEDeXgmRW2j45raud1BcC4=',begin_day: vm.begin_day};
 
+      this.$http({
+        method: 'get',
+        url: process.env.BASE_URL + '/market/goldk',
+        params: params,
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+      })
+      .then(function (response) {
+        console.log(response)
+        if(response.data.code === 100){
+          // vm.currentDatatime = response.data.data.data.data_list[0].date
+          vm.tableData.tDataList = response.data.data.data.data_list.reverse()
+          vm.pageDataList = vm.tableData.tDataList.slice(0, vm.currentPage * vm.pagesize)
+          console.log(vm.pageDataList)
+        }
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+    },
+    setBeginDate: function (v) {
+      console.log(v)
+      this.begin_day = v.replace(/-/g,'')
+      console.log(this.begin_day)
+    },
+    Pagechange: function (v) {
+        this.currentPage = v
+        console.log(v)
+        this.FormatterPage(v)
+    },
+    FormatterPage: function (v) {
+        console.log("v" + v)
+        var vm = this
+        this.pageDataList = vm.tableData.tDataList.slice((v - 1) * vm.pagesize, v * vm.pagesize)
+        console.log(this.pageDataList)
+    },
+    plusOrReduce: function (str) {
+      if (str >= 0) {
+        return 'f-red'
+      } else {
+        return 'f-green'
+      }
+    }
+  },
+  filters: {
+    percentRate (str) {
+        return (str * 100).toFixed(2) + '%'
+    },
+    tofixed (str) {
+        return str.toFixed(2)
     }
   }
 }

@@ -7,7 +7,7 @@
   <div class="top">
     <h1 class="user-name">
       <img src="../../assets/default_user.jpg" width="50" height="50" alt="">
-      <span>园博吧超级管理员</span>
+      <span>{{ nickname }}</span>
       <a href="javascript:;" class="logout" @click="logout"><i class="iconfont icon-tuichudenglu"></i></a>
     </h1>
   </div>
@@ -18,8 +18,13 @@ export default {
   name: 'top',
   data () {
     return {
-      msg: ''
+      nickname: 'xxxx'
     }
+  },
+  mounted: function(){
+    this.$nextTick(function() {
+      this.nickname = this.$store.state.nickname;
+    })
   },
   methods: {
     logout(){

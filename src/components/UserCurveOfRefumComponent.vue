@@ -129,7 +129,7 @@ export default {
           if(response.data.code === 100){
             vm.TOP = response.data.data.top;
             vm.CurveOfAccountReturn = response.data.data.CurveOfAccountReturn;
-            this.showCurveMap();
+            // this.showCurveMap();
           }
         })
         .catch(function (error) {

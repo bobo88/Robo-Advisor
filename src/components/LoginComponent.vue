@@ -79,9 +79,9 @@ export default {
             // let expireDays = 1000 * 60 * 60 * 24 * 15;
             // vm.setCookie('session', response.data.data.trading_token, expireDays);
             sessionStorage.setItem('trading_token', response.data.data.trading_token);
-            // sessionStorage.setItem('username', response.data.data.cust_name);
+            sessionStorage.setItem('nickname', response.data.data.nickname);
             vm.$store.commit('SETTOKEN', response.data.data.trading_token);
-            // vm.$store.commit('SETUSERNAME', response.data.data.cust_name);
+            vm.$store.commit('SETNICKNAME', response.data.data.nickname);
 
             //登录成功后
             vm.$router.push('/main'); 

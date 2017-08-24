@@ -31,7 +31,7 @@ const store = new Vuex.Store({
         mAu: 0
     },
     trading_token: sessionStorage.getItem('trading_token'),
-    username: sessionStorage.getItem('username')
+    nickname: sessionStorage.getItem('nickname')
 	},
 	mutations: {
 		ModifiedStateAu: function (state) {
@@ -40,8 +40,8 @@ const store = new Vuex.Store({
     SETTOKEN: function (state, trading_token) {
       state.trading_token = trading_token
     },
-    SETUSERNAME: function (state, username) {
-      state.username = username
+    SETNICKNAME: function (state, nickname) {
+      state.nickname = nickname
     }
 	}
 });
