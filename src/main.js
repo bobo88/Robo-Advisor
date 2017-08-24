@@ -20,24 +20,25 @@ Vue.config.productionTip = false;
 /* eslint-disable no-new */
 const store = new Vuex.Store({
 	state: {
-		domain:'http://test.example.com', //保存后台请求的地址，修改时方便（比方说从测试服改成正式服域名）
-		userInfo: { //保存用户信息
-			nick: null,
-			ulevel: null,
-			uid: null,
-			portrait: null
-		}
+		quoatation: {
+      Au: [],
+      Ag: [],
+      mAu: []
+    },
+    marketstate: {
+        Au: 0,
+        Ag: 0,
+        mAu: 0
+    },
+    trading_token: sessionStorage.getItem('trading_token')
 	},
 	mutations: {
-		//更新用户信息
-		updateUserInfo(state, newUserInfo) {
-			state.userInfo = newUserInfo;
-		}
-	},
-	actions: {
-		updateUserInfo(context){
-			context.commit('updateUserInfo');
-		}
+		ModifiedStateAu: function (state) {
+      state.marketstate.Au = 1
+    },
+    SETTOKEN: function (state, trading_token) {
+      state.trading_token = trading_token
+    }
 	}
 });
 

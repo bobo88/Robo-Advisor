@@ -6,17 +6,17 @@
 <template>
   <div class="transction-query">
   	<!-- 成交查询 -->
-    <exchange-query></exchange-query>
+    <user-exchange-query></user-exchange-query>
 
   </div>
 </template>
 
 <script>
-import ExchangeQuery from '@/components/ExchangeQuery'
+import UserExchangeQuery from '@/components/UserExchangeQuery'
 
 export default {
   	components: {
-  		ExchangeQuery
+  		UserExchangeQuery
   	},
   	name: 'transction-query',
   	data () {

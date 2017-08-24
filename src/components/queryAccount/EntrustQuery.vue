@@ -6,17 +6,17 @@
 <template>
   <div class="entrust-query">
   	<!-- 委托查询 -->
-    <entrust-query-component></entrust-query-component>
+    <user-entrust-query-component></user-entrust-query-component>
 
   </div>
 </template>
 
 <script>
-import EntrustQueryComponent from '@/components/EntrustQueryComponent'
+import UserEntrustQueryComponent from '@/components/UserEntrustQueryComponent'
 
 export default {
   	components: {
-  		EntrustQueryComponent
+  		UserEntrustQueryComponent
   	},
   	name: 'entrust-query',
   	data () {

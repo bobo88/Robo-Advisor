@@ -6,21 +6,21 @@
 <template>
   <div class="asset-query">
   	<!-- 账户参数 -->
-    <account-parameters></account-parameters>
+    <user-account-parameters></user-account-parameters>
 
   	<!-- 账户持仓 -->
-    <account-position-lang :head-summary="true"></account-position-lang>
+    <user-account-position-lang :head-summary="true"></user-account-position-lang>
   </div>
 </template>
 
 <script>
-import AccountPositionLang from '@/components/AccountPositionLang'
-import AccountParameters from '@/components/AccountParameters'
+import UserAccountPositionLang from '@/components/UserAccountPositionLang'
+import UserAccountParameters from '@/components/UserAccountParameters'
 
 export default {
 	components: {
-		AccountPositionLang,
-		AccountParameters
+		UserAccountPositionLang,
+		UserAccountParameters
 	},
   	name: 'asset-query',
   	data () {

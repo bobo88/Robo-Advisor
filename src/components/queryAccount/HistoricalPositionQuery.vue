@@ -6,17 +6,17 @@
 <template>
   <div class="historical-position-query">
   	<!-- 历史持仓 -->
-    <historical-position-query-component></historical-position-query-component>
+    <user-historical-position-query-component></user-historical-position-query-component>
 
   </div>
 </template>
 
 <script>
-import HistoricalPositionQueryComponent from '@/components/HistoricalPositionQueryComponent'
+import UserHistoricalPositionQueryComponent from '@/components/UserHistoricalPositionQueryComponent'
 
 export default {
   	components: {
-  		HistoricalPositionQueryComponent
+  		UserHistoricalPositionQueryComponent
   	},
   	name: 'historical-position-query',
   	data () {

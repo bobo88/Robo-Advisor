@@ -25,15 +25,15 @@ export default {
   methods: {
     //请求用户的一些信息
     getUserInfo(){
-      this.userInfo = {
-        nick: 'admin',
-        ulevel: 20,
-        uid: '10000',
-        portrait: 'assets/default_user.jpg'
-      };
+      // this.userInfo = {
+      //   nick: 'admin',
+      //   ulevel: 20,
+      //   uid: '10000',
+      //   portrait: 'assets/default_user.jpg'
+      // };
 
       //提交mutation到Store
-      this.$store.commit('updateUserInfo', this.userInfo); 
+      // this.$store.commit('updateUserInfo', this.userInfo); 
 
       // //获取信息请求
       // this.$http.get('static/demo.json', {

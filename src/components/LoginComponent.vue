@@ -48,49 +48,50 @@ export default {
     login(){
       var vm = this;
       if(this.account!='' && this.password!=''){
-        if( this.account != 'admin' || this.password != '123456'){
-          vm.msgCont = '账号或密码错误';
+          this.toLogin();
+      }else{
+        vm.msgCont = '请完整输入账号和密码';
           setTimeout(function(){
             vm.msgCont = '';
           }, 2000);
-        }else{
-          this.toLogin();
-        }
       }
     },
     toLogin(){
+        var vm = this;
         //需要向后端发送的登录参数
-        let loginParam = {
-          account: this.account,
-          password: this.password
+        let params = {
+          userName: this.account,
+          pw: this.password
         }
 
         //设置在登录状态
         this.isLoging = true;
         
         //请求后端,比如:
-        /*this.$http.post( 'example.com/login.php', {
-        param: loginParam).then((response) => {
-          if(response.data.code == 1){
+        this.$http({
+          method: 'post',
+          url: process.env.BASE_URL + '/roboAdvisor/login',
+          params: params,
+          headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+        })
+        .then(function (response) {
+          if(response.data.code === 100){
             let expireDays = 1000 * 60 * 60 * 24 * 15;
-            this.setCookie('session', response.data.session, expireDays);
-            //登录成功后
-            this.$router.push('/user_info'); 
-          }
-        }, (response) => {
-            //Error
-        });
-        */
+            vm.setCookie('session', response.data.data.trading_token, expireDays);
+            vm.$store.commit('SETTOKEN', response.data.data.trading_token);
 
-        //演示用
-        setTimeout(()=>{
-          //登录状态15天后过期
-          let expireDays = 1000 * 60 * 60 * 24 * 15;
-          this.setCookie('session','blablablablabla...', expireDays);
-          this.isLoging = false;
-          //登录成功后
-          this.$router.push('/main');
-        },500)
+            //登录成功后
+            vm.$router.push('/main'); 
+          }else{
+            vm.msgCont = '账号或密码错误';
+            setTimeout(function(){
+              vm.msgCont = '';
+            }, 2000);
+          }
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
     }
   }
 }
