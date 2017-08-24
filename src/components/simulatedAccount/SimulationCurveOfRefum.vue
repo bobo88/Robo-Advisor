@@ -5,22 +5,17 @@
 -->
 <template>
   <div class="simulation-curve-of-refum">
-    <!-- 模拟收益走势简介 -->
-    <curve-of-refum-summary-component></curve-of-refum-summary-component>
-
     <!-- 模拟收益走势 -->
-    <curve-of-refum-component></curve-of-refum-component>
+    <user-curve-of-refum-component></user-curve-of-refum-component>
   </div>
 </template>
 
 <script>
-import CurveOfRefumComponent from '@/components/CurveOfRefumComponent'
-import CurveOfRefumSummaryComponent from '@/components/CurveOfRefumSummaryComponent'
+import UserCurveOfRefumComponent from '@/components/UserCurveOfRefumComponent'
 
 export default {
     components: {
-      CurveOfRefumComponent,
-      CurveOfRefumSummaryComponent
+      UserCurveOfRefumComponent
     },
     name: 'simulation-curve-of-refum',
     data () {
