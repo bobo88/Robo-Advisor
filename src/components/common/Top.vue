@@ -8,6 +8,7 @@
     <h1 class="user-name">
       <img src="../../assets/default_user.jpg" width="50" height="50" alt="">
       <span>园博吧超级管理员</span>
+      <a href="javascript:;" class="logout" @click="logout"><i class="iconfont icon-tuichudenglu"></i></a>
     </h1>
   </div>
 </template>
@@ -19,6 +20,12 @@ export default {
     return {
       msg: ''
     }
+  },
+  methods: {
+    logout(){
+      sessionStorage.setItem('trading_token', '');
+      this.$router.push('/login'); 
+    }
   }
 }
 </script>
@@ -29,6 +36,10 @@ export default {
     .user-name{ padding: 15px 20px; height: 80px; line-height: 50px; vertical-align: middle; font-weight: normal; font-style: normal;
       img{ display: inline-block; width: 50px; height: 50px; border-radius: 50px; vertical-align: middle;}
       span{ margin-left: 10px; display: inline-block; height: 50px; line-height: 50px; vertical-align: middle;}
+      
+      .logout{ float: right; color: #fff;
+        .icon-tuichudenglu{ font-size: 24px;}
+      }
     }
   }
 </style>
