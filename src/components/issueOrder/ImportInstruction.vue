@@ -28,7 +28,7 @@
 	  	  <tbody>
 	  	    <tr v-for="(item,index) in simulatedData">
 	  	      <td>{{ item.prodCode }}</td>
-	  	      <td>{{ item.prodCode === 'AuTD' ? '黄金延期' : (item.prodCode === 'mAuTD' ? '迷你黄金延期' : '白银延期') }}</td>
+	  	      <td>{{ item.prodCode === 'Au(T+D)' ? '黄金延期' : (item.prodCode === 'mAu(T+D)' ? '迷你黄金延期' : '白银延期') }}</td>
 	  	      <td>{{ item.tradeSignalCond !== 0 ? ((item.tradeSignalCond == 1) ? '&gt;=' : '&lt;=') : '' }}</td>
 	  	      <td>{{ item.offsetFlag == 0 ? '开仓' : '平仓' }}</td>
 	  	      <td>{{ item.entrPrice }}</td>
@@ -63,9 +63,9 @@
   	        <tr>
   	          <td>
 	  	          <Select v-model="itemImportPopUpData.prodCode" style="width:80px">
-	  	              <Option value="AuTD" key="0">AuTD</Option>
-	  	              <Option value="mAuTD" key="1">mAuTD</Option>
-	  	              <Option value="AgTD" key="2">AgTD</Option>
+	  	              <Option value="Au(T+D)" key="0">Au(T+D)</Option>
+	  	              <Option value="mAu(T+D)" key="1">mAu(T+D)</Option>
+	  	              <Option value="Ag(T+D)" key="2">Ag(T+D)</Option>
 	  	          </Select>
   	          </td>
   	          <td>{{ itemImportPopUpData.prodCode === 'AuTD' ? '黄金延期' : (itemImportPopUpData.prodCode === 'mAuTD' ? '迷你黄金延期' : '白银延期') }}</td>
