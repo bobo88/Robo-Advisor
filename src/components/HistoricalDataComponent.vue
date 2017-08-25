@@ -174,7 +174,7 @@ export default {
   methods: {
     getklineData: function () {
       var vm = this;
-      var params = {inst_id: encodeURIComponent(vm.chooseContract),time: vm.time,trading_token: 'lpUkD6mW7mAQ5Q0MFDr1Xbq7m6XD7LzuJuJMbs0LYIknNf4Gh8t9pzfZStie6N2nGAI9iew5f/zIqKe7barv0dLSoqbggtcLUgYjF+kG85lyElb9vfZ7TzXQebSOYuibNWRXiJGvs9mtzffC/oMC5rEDeXgmRW2j45raud1BcC4=',begin_day: vm.begin_day};
+      var params = {inst_id: encodeURIComponent(vm.chooseContract),time: vm.time,trading_token: vm.$store.state.trading_token,begin_day: vm.begin_day};
 
       this.$http({
         method: 'get',

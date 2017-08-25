@@ -168,7 +168,7 @@ export default {
         })
         .then(function (response) {
           if(response.data.code === 100){
-            vm.simulatedData = response.data.data;
+            vm.simulatedData = response.data.data.list;
           }
         })
         .catch(function (error) {

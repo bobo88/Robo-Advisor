@@ -137,7 +137,7 @@ export default {
   },
   mounted: function(){
     var vm = this;
-    var params = {inst_id: encodeURIComponent(vm.chooseContract),day: 1,trading_token: 'lpUkD6mW7mAQ5Q0MFDr1Xbq7m6XD7LzuJuJMbs0LYIknNf4Gh8t9pzfZStie6N2nGAI9iew5f/zIqKe7barv0dLSoqbggtcLUgYjF+kG85lyElb9vfZ7TzXQebSOYuibNWRXiJGvs9mtzffC/oMC5rEDeXgmRW2j45raud1BcC4='};
+    var params = {inst_id: encodeURIComponent(vm.chooseContract),day: 1,trading_token: vm.$store.state.trading_token};
 
     this.$http({
       method: 'post',
