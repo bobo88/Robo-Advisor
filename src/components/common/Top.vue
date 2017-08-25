@@ -18,7 +18,7 @@ export default {
   name: 'top',
   data () {
     return {
-      nickname: 'xxxx'
+      nickname: ''
     }
   },
   mounted: function(){
@@ -28,7 +28,8 @@ export default {
   },
   methods: {
     logout(){
-      sessionStorage.setItem('trading_token', '');
+      sessionStorage.removeItem('trading_token');
+      sessionStorage.removeItem('nickname');
       this.$router.push('/login'); 
     }
   }

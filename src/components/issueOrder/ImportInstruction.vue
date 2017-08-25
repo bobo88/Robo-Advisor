@@ -48,7 +48,7 @@
 	</section>
 	
 	<!-- 提示信息 -->
-  	<msg :msg="msgCont" v-if="showMsgState" @close-tc="closeMsg"></msg>
+  	<msg :msg="msgCont" v-if="showMsgState" @close-tc="closeMsg" :msg-style="msgStyle"></msg>
 
 	<!-- 修改导入指令 -->
   	<pop-up v-if="showPopUpState" @close-tc="closePopUp">
@@ -121,6 +121,7 @@ export default {
   	name: 'import-instruction',
   	data () {
 	    return {
+	    	msgStyle: 'width:300px',
 	    	showPopUpState: false,
 	      	files:[],
 	      	simulatedData: {},

@@ -96,7 +96,7 @@
       </tbody>
     </table>
 
-    <msg :msg="msgCont" v-if="showMsgState" @close-tc="closeMsg"></msg>
+    <msg :msg="msgCont" v-if="showMsgState" @close-tc="closeMsg" :msg-style="msgStyle"></msg>
   </div>
 </template>
 
@@ -116,6 +116,7 @@ export default {
   name: 'set-the-transaction-order',
   data () {
     return {
+      msgStyle: 'width: 300px',
       bs: '', //买卖方向： b买， s卖
       entrAmount: '', //委托数量
       entrPrice: '', //委托价格
