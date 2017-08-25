@@ -19,38 +19,10 @@ export default {
     }
   },
   mounted(){
-    //组件开始挂载时获取用户信息
-    this.getUserInfo();
+
   },
   methods: {
-    //请求用户的一些信息
-    getUserInfo(){
-      // this.userInfo = {
-      //   nick: 'admin',
-      //   ulevel: 20,
-      //   uid: '10000',
-      //   portrait: 'assets/default_user.jpg'
-      // };
 
-      //提交mutation到Store
-      // this.$store.commit('updateUserInfo', this.userInfo); 
-
-      // //获取信息请求
-      // this.$http.get('static/demo.json', {
-      //   //参数
-      //   "params": this.userInfo
-      //   }).then((response) => {
-      //     //Success
-      //     if(response.data.code == 1){
-            // console.log(this);
-            // console.log(this.$store);
-      //       console.log('---------------------------');
-           // this.$store.commit('updateUserInfo', this.userInfo); 
-      //     }
-      //   }, (response) => {
-      //   //Error
-      // });
-    }
   }
 }
 </script>
@@ -140,5 +112,6 @@ strong{ font-weight: normal;}
   .ivu-btn-ghost{ color: #fff; border: 1px solid #90a4d9;}
   .ivu-date-picker{ color: #333;}
   .ivu-tooltip-inner{ max-width: 400px;}
+  .ivu-page{ padding: 10px 0; text-align: right;}
 }
 </style>

@@ -27,7 +27,7 @@
         </tr>
       </thead>
       <tbody v-if="simulatedData.length > 0">
-        <tr v-for="item in simulatedData">
+        <tr v-for="item in pageDataList">
           <td>{{ item.tradeTime }}</td>
           <td>{{ item.spotName }}</td>
           <td>{{ item.tradeType }}</td>
@@ -65,6 +65,9 @@
         </table>
       </div>
     </pop-up>
+
+    <Page :total="simulatedData.length" @on-change="Pagechange" :page-size="pagesize" v-if="showPage"></Page>
+
   </div>
 </template>
 
@@ -107,11 +110,12 @@ export default {
   data () {
     return {
       showPopUpState: false,
+      showPage: false,
       end_date: '', //结束日期
       h_query_num: 5, //每页记录数
       h_start_num: 1, //当前第几页
       start_date: '', //开始日期
-      trading_token: 'xx', //交易token
+      trading_token: '', //交易token
 
       //数据
       simulatedData: [],
@@ -166,7 +170,11 @@ export default {
           lang: 'Run Status',
           content: ''
         }
-      }
+      },
+
+      pageDataList: [],
+      currentPage: 1,
+      pagesize: 10
     }
   },
   mounted: function(){
@@ -233,13 +241,26 @@ export default {
         })
         .then(function (response) {
           if(response.data.code === 100){
-            vm.simulatedData = response.data.data;
+            vm.simulatedData = response.data.data.list;
+            vm.pageDataList = vm.simulatedData.slice(0, vm.currentPage * vm.pagesize);
+            vm.showPage = true;
           }
         })
         .catch(function (error) {
           console.log(error);
         });
       }
+    },
+    Pagechange: function (v) {
+        this.currentPage = v
+        console.log(v)
+        this.FormatterPage(v)
+    },
+    FormatterPage: function (v) {
+        console.log("v" + v)
+        var vm = this
+        this.pageDataList = vm.simulatedData.slice((v - 1) * vm.pagesize, v * vm.pagesize)
+        console.log(this.pageDataList)
     }
   }
 }
