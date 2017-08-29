@@ -8,18 +8,18 @@
     <header class="table-common-head clearfix">
         <span class="tit fl">查看指令 <br/> Query Orders</span>
         <div class="query-orders-component-summary fr">
-            <Date-picker type="date" placeholder="选择日期" style="width: 140px" placement="bottom-end" class="mr10"></Date-picker>
+            <Date-picker type="date" v-model="startTime" placeholder="选择日期" style="width: 140px" placement="bottom-end" class="mr10"></Date-picker>
             <span class="mr10">至(To)</span>
-            <Date-picker type="date" placeholder="选择日期" style="width: 140px" placement="bottom-end" class="mr10"></Date-picker>
+            <Date-picker type="date" v-model="endTime" placeholder="选择日期" style="width: 140px" placement="bottom-end" class="mr10"></Date-picker>
 
-            <Select v-model="chooseContract" style="width:160px" class="mr10">
+            <Select v-model="spotName" style="width:160px" class="mr10">
                 <Option v-for="item in chooseContractList" :value="item.value" :key="item.value">{{ item.label }}</Option>
             </Select>
-            <Select v-model="operatingStatus" style="width:180px" class="mr10">
+            <Select v-model="runStatus" style="width:180px" class="mr10">
                 <Option v-for="item in operatingStatusList" :value="item.value" :key="item.value">{{ item.label }}</Option>
             </Select>
 
-            <Button type="info" shape="circle" style="width: 70px" class="mr10">查询</Button>
+            <Button type="info" shape="circle" style="width: 70px" class="mr10" @click="searchData">查询</Button>
         </div>
     </header>
 
@@ -33,19 +33,27 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="item in tableData.tDataList">
-          <td>{{ item.OrderNumber }}</td>
-          <td>{{ item.Time }}</td>
-          <td>{{ item.SpotName }}</td>
-          <td>{{ item.TradeSignal.default}}<br/> {{ item.TradeSignal.lang }}</td>
-          <td>{{ item.TradeType }}</td>
-          <td>{{ item.OrderPrice }}</td>
-          <td>{{ item.OrderAmount }}</td>
-          <td>{{ item.Deadline }}</td>
+        <tr v-for="item in pageDataList">
+           <td>{{ item.orderNumber }}</td>
+           <td>{{ item.orderTime }}</td>
+           <td>{{ item.prodCode }}</td>
+           <td>{{ item.tradeSignalType === 5 ? '---' :
+                  item.tradeSignalType === 1 ? '最新价' :
+                  item.tradeSignalType === 2 ?  '成交量' :
+                  item.tradeSignalType === 3 ? '成交额' : '均价'
+               }}
+               {{ item.tradeSignalCond === 1 ? '>=' : '<='}}
+               {{ item.entrPrice }}
+           </td>
 
-          <td v-if="item.Remark.succ" class="f-blue" @click="showPopUp(item.OrderNumber)">{{ item.Remark.text }}</td>
-          <td v-else>{{ item.Remark.text }}</td>
-
+           <td>{{ (item.bs === 'b' && item.offsetFlag === 0) ? '多开' :
+                  (item.bs === 's' && item.offsetFlag === 0) ? '空开' :
+                  (item.bs === 'b' && item.offsetFlag === 1) ? '平多' : '平空' }}
+           </td>
+           <td>{{ item.entrPrice }}</td>
+           <td>{{ item.entrAmount }}</td>
+           <td>{{ item.orderDeadline }}</td>
+           <td>---</td>
         </tr>
       </tbody>
     </table>
@@ -67,6 +75,8 @@
       </div>
     </pop-up>
 
+    <Page :total="simulatedData.length" @on-change="Pagechange" :page-size="pagesize" v-if="showPage"></Page>
+
   </div>
 </template>
 
@@ -77,6 +87,28 @@ import plusOrReduce from '@/components/common/plusOrReduce'
 //引入弹窗组件
 import PopUp from '@/components/common/PopUp'
 
+function formatTime(s) {
+    if(!s){
+        return;
+    }
+    var _str = [];
+
+    //年yyyy
+    _str[0] = s.getFullYear();
+    //月MM
+    s.getMonth() >= 9 ? _str[1] = s.getMonth()+1 : _str[1] = '0' + (s.getMonth()+1);
+    //日dd
+    s.getDate() > 9 ? _str[2] = s.getDate() : _str[2] = '0' + s.getDate();
+    //小时HH
+    s.getHours() > 9 ? _str[3] = s.getHours() : _str[3] = '0' + s.getHours();
+    //分钟mm
+    s.getMinutes() > 9 ? _str[4] = s.getMinutes() : _str[4] = '0' + s.getMinutes();
+    //秒钟ss
+    s.getSeconds() > 9 ? _str[5] = s.getSeconds() : _str[5] = '0' + s.getSeconds();
+    
+    return _str.join('');
+}
+
 export default {
   components: {
     currencyFormatter,
@@ -86,45 +118,60 @@ export default {
   name: 'query-orders-component',
   data () {
     return {
-        chooseContract: '',
+      showPopUpState: false,
+      showPage: false,
+      endTime: '',  //结束时间  string  
+      order:'',    //指令编号  string  选填
+      page_num:1,  //当前页码  number  
+      page_size:5, //每页记录数 number  
+      runStatus: '', //运行状态  string  选填
+      spotName:'',  //合约代码  string  选填
+      startTime: '',
+      trading_token: '', //交易token
+
+      //数据
+      simulatedData: [],
+
+        //合约代码
         chooseContractList: [
             {
-                value: '选择合约 all spots',
+                value: 'all spots',
                 label: '选择合约 all spots'
             },
             {
-                value: '黄金延期Au(T+D)',
+                value: 'Au(T+D)',
                 label: '黄金延期Au(T+D)'
             },
             {
-                value: '迷你黄金延期mAu(T+D)',
+                value: 'mAu(T+D)',
                 label: '迷你黄金延期mAu(T+D)'
             },
             {
-                value: '白银延期Ag(T+D)',
+                value: 'Ag(T+D)',
                 label: '白银延期Ag(T+D)'
             }
         ],
-        operatingStatus: '',
+
+        //运行状态
         operatingStatusList: [
             {
-                value: '选择运行状态 all run_status',
+                value: 'all run_status',
                 label: '选择运行状态 all run_status'
             },
             {
-                value: '中断 suspended',
+                value: 'suspended',
                 label: '中断 suspended'
             },
             {
-                value: '运行中 running',
+                value: 'running',
                 label: '运行中 running'
             },
             {
-                value: '已触发 triggered',
+                value: 'triggered',
                 label: '已触发 triggered'
             },
             {
-                value: '已成交 trade succeeded',
+                value: 'trade succeeded',
                 label: '已成交 trade succeeded'
             }
         ],
@@ -273,7 +320,21 @@ export default {
             lang: 'Match Amount',
             content: ''
           }
-        }
+        },
+
+        pageDataList: [],
+        currentPage: 1,
+        pagesize: 10
+    }
+  },
+  computed: {
+    startDateFarmatter() {
+      var s = this.startTime;
+      return formatTime(s);
+    },
+    endDateFarmatter() {
+      var s = this.endTime;
+      return formatTime(s);
     }
   },
   methods: {
@@ -316,6 +377,49 @@ export default {
     },
     closePopUp(){
       this.showPopUpState = false;
+    },
+    searchData(){
+
+      var vm = this;
+      var params = {
+        endTime: this.endDateFarmatter, //结束日期
+        page_size: this.page_size, //每页记录数
+        page_num: this.page_num, //当前第几页
+        startTime: this.startDateFarmatter, //开始日期
+        runStatus: this.runStatus, //开始日期
+        spotName: this.spotName, //开始日期
+        trading_token: vm.$store.state.trading_token, //交易token
+      };
+
+      if(!!this.endTime && !!this.page_size && !!this.page_num && !!this.startTime && !!this.runStatus && !!this.spotName){
+        this.$http({
+          method: 'post',
+          url: process.env.BASE_URL + '/marketOrder/historyOrder',
+          params: params,
+          headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+        })
+        .then(function (response) {
+          if(response.data.code === 100){
+            vm.simulatedData = response.data.data.list;
+            vm.pageDataList = vm.simulatedData.slice(0, vm.currentPage * vm.pagesize);
+            vm.showPage = true;
+          }
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+      }
+    },
+    Pagechange: function (v) {
+        this.currentPage = v
+        console.log(v)
+        this.FormatterPage(v)
+    },
+    FormatterPage: function (v) {
+        console.log("v" + v)
+        var vm = this
+        this.pageDataList = vm.simulatedData.slice((v - 1) * vm.pagesize, v * vm.pagesize)
+        console.log(this.pageDataList)
     }
   }
 }

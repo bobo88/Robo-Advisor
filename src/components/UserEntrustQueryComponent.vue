@@ -24,7 +24,7 @@
           </th>  
         </tr>
       </thead>
-      <tbody v-if="simulatedData.length > 0">
+      <tbody v-if="simulatedData && simulatedData.length > 0">
         <tr v-for="item in pageDataList" >
           <td>{{ item.eExchTime }}</td>
           <td>{{ item.prodCode }}</td>
@@ -244,8 +244,10 @@ export default {
         .then(function (response) {
           if(response.data.code === 100){
             vm.simulatedData = response.data.data.list;
-            vm.pageDataList = vm.simulatedData.slice(0, vm.currentPage * vm.pagesize);
-            vm.showPage = true;
+            if(vm.simulatedData && vm.simulatedData.length > 0){
+              vm.pageDataList = vm.simulatedData.slice(0, vm.currentPage * vm.pagesize);
+              vm.showPage = true;
+            }
           }
         })
         .catch(function (error) {
@@ -260,9 +262,11 @@ export default {
     },
     FormatterPage: function (v) {
         console.log("v" + v)
-        var vm = this
-        this.pageDataList = vm.simulatedData.slice((v - 1) * vm.pagesize, v * vm.pagesize)
-        console.log(this.pageDataList)
+        var vm = this;
+        if(vm.simulatedData && vm.simulatedData.length > 0){
+          this.pageDataList = vm.simulatedData.slice((v - 1) * vm.pagesize, v * vm.pagesize)
+          console.log(this.pageDataList)
+        }
     }
   }
 }

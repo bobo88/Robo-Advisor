@@ -10,7 +10,7 @@
   		<div class="todays-data-component-summary fr">
         <span class="current-day mr10">{{currentDatatime}}</span>
 
-  			<Select v-model="chooseContract" style="width:140px" class="mr10">
+  			<Select v-model="chooseContract" style="width:140px" class="mr10" @on-change="changTodaysData">
             <Option v-for="item in chooseContractList" :value="item.value" :key="item.value">{{ item.label }}</Option>
         </Select>
         <!-- <Button type="ghost" shape="circle">导出(Export)</Button> -->
@@ -136,31 +136,37 @@ export default {
     }
   },
   mounted: function(){
-    var vm = this;
-    var params = {inst_id: encodeURIComponent(vm.chooseContract),day: 1,trading_token: vm.$store.state.trading_token};
-
-    this.$http({
-      method: 'post',
-      url: process.env.BASE_URL + '/market/goldtime',
-      params: params,
-      headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-    })
-    .then(function (response) {
-      if(response.data.code === 100){
-        vm.currentDatatime = response.data.data.data.data_list[0].date
-        vm.tableData.tDataList = response.data.data.data.data_list[0].minute_list.reverse()
-        vm.pageDataList = vm.tableData.tDataList.slice(0, vm.currentPage * vm.pagesize)
-        console.log(vm.pageDataList)
-      }
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
+    
+    this.getTodaysData()
   },
   methods: {
+    getTodaysData:function (v) {
+      var vm = this;
+      var params = {inst_id: encodeURIComponent(vm.chooseContract),day: 1,trading_token: vm.$store.state.trading_token};
+      this.$http({
+        method: 'post',
+        url: process.env.BASE_URL + '/market/goldtime',
+        params: params,
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+      })
+      .then(function (response) {
+        if(response.data.code === 100){
+          vm.currentDatatime = response.data.data.data.data_list[0].date
+          vm.tableData.tDataList = response.data.data.data.data_list[0].minute_list.reverse()
+          vm.pageDataList = vm.tableData.tDataList.slice(0, vm.currentPage * vm.pagesize)
+          console.log(vm.pageDataList)
+        }
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+    },
+    changTodaysData: function () {
+      console.log(this.chooseContract);
+      this.getTodaysData()
+    },
     Pagechange: function (v) {
         this.currentPage = v
-        console.log(v)
         this.FormatterPage(v)
     },
     FormatterPage: function (v) {
